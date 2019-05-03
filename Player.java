@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Player{
 
+	private String playerName;
 	private int actorLevel;
 	private Set currLocation;
 	private Wallet myWallet;
@@ -10,12 +11,16 @@ public class Player{
 	private Roll dice; 
 
 	Player(){
-	
+		playerName = "";//haven't thought about default name yet
 		actorLevel = 1;
 		//currLocation = trailer; We don't know how to implement yet
 		myWallet = new Wallet();
 		jobDescription = new Work();
 		dice = new Roll();
+	}
+
+	public void setPlayerName(String name){
+		playerName = name;
 	}
 
 	public void move(Set newLocation){
@@ -46,7 +51,7 @@ public class Player{
 				//	--->send actingEffort to currLocation to retreive true or false
 				//		,will check if budget is less than or equal to actingEffort
 				//	if(successAct){
-				//		get paid
+				//		get paid (invoke myWallet)
 				//		currLocation.removeShotCounter();
 				//		if(currLocation.isSceneWrap()){
 				//			
@@ -55,6 +60,19 @@ public class Player{
 				//		if acting_type == extra --> pay
 				//		
 		}
+	}
+	
+	public void upgrade(int upgradeLevel){
+		//do check to see if valid level, and if near or in CastingOffice
+		//if check succeeds
+			//myWallet.addDollars(-amount) or myWallet.addCredits(-amount)
+			//actorLevel = upgradeLevel;
+		//if not located in the CastingOffice
+			//currLocation = CastingOffice;
+	}
+
+	public Wallet evalWalletContent(){
+		return myWallet;
 	}
 
 

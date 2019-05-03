@@ -25,23 +25,23 @@ public class Set{
 		// we'll get there :)
 	}
 
-	public LinkedList<Work> findExtraActor(int playerLevel){
+	public LinkedList<Work> findAvailWork(int playerLevel){
 
 		LinkedList<Work> availActors = new LinkedList<Work>();
+		
+		LinkedList<MainRole> availMain = film.findMainActor(playerLevel); 
+		
+		for(int j = 0; j < availMain.size(); j++){
+			MainRole currActor = availMain.get(j);
+			availActors.add(currActor);
+		}		
+	
 		for(int i = 0; i < actors.size(); i++ ){
 			ExtraRole currActor = actors.get(i);
 
-			if(!currActor.getWorkStatus() && currActor.getWorkLevel() <= playerLevel ){
-			
+			if(!currActor.getWorkStatus() && currActor.getWorkLevel() <= playerLevel ){		
 				availActors.add(currActor);
 			}
-		}
-
-		LinkedList<Work> availMain = film.findMainActor(playerLevel); 
-		
-		for(int j = 0; j < availMain.size(); j++){
-			Work currActor = availMain.get(j);
-			availActors.add(currActor);
 		}
 
 		return availActors; //returns a list of avail actors player can choose from 

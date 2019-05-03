@@ -20,9 +20,9 @@ public class Scene{
 		}
  	}
 
-	public LinkedList<Work> findMainActor(int playerLevel){
+	public LinkedList<MainRole> findMainActor(int playerLevel){
 
-		LinkedList<Work> availActors = new LinkedList<Work>();
+		LinkedList<MainRole> availActors = new LinkedList<MainRole>();
 		for(int i = 0; i < actors.size(); i++ ){
 			MainRole currActor = actors.get(i);
 
