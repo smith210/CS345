@@ -1,8 +1,9 @@
 import java.util.*;
 
-public abstract class Work{
+public class Work{
 	private int workLevel;
 	private boolean isWorking;
+	private String workType;
 
 	public int getWorkLevel(){
 		return workLevel;
@@ -23,8 +24,11 @@ public abstract class Work{
 	public void bufWork(){
 		isWorking = true;
 	}
+	
+	public void setWorkType(String type){
+		workType = type;
+	}
+	//public abstract int payout(boolean isActSuccess);
 
-	public abstract int payout(boolean isActSuccess);
-	public abstract String getActorType();
 
 }

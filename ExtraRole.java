@@ -1,9 +1,10 @@
 public class ExtraRole extends Work {
 
-	public String getActorType(){
-		return "EXTRA";
+	private final String ACTOR_TYPE = "EXTRA";
+	
+	public ExtraRole(){
+		super.setWorkType(ACTOR_TYPE);
 	}
-
 	public int payout(boolean isActSuccess){
 		return 0;
 	}

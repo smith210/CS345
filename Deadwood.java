@@ -5,9 +5,11 @@ public class Deadwood{
 		if(playerNum != 2 && playerNum != 3){
 			throw new invalidPlayerException();
 		}
-		Roll die = new Roll();
+		/*Roll die = new Roll();
 		System.out.println(die.getAC());
 		die.increaseAC();
-		System.out.println(die.getAC());
+		System.out.println(die.getAC());*/
+		
+		//will contain game logic;
 	}
 }
