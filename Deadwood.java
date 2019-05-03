@@ -11,5 +11,7 @@ public class Deadwood{
 		System.out.println(die.getAC());*/
 		
 		//will contain game logic;
+		Board currGame = new Board(playerNum);
+		//might contain a while loop to keep playing the game until player quits.
 	}
 }
