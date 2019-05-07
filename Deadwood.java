@@ -12,6 +12,11 @@ public class Deadwood{
 		
 		//will contain game logic;
 		Board currGame = new Board(playerNum);
-		//might contain a while loop to keep playing the game until player quits.
+		boolean isPlaying = true;
+		while(isPlaying){
+			//might contain a while loop to keep playing the game until player quits.
+			//if user wants to quit, exit loop
+			isPlaying = false;
+		}
 	}
 }

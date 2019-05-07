@@ -11,7 +11,7 @@ public class Scene{
 
 	}
 	
-	public boolean ifActSucceeded(int roll){
+	public boolean evaluateActing(int roll){
 
 		if(movieBudget <= roll){
 			return true;

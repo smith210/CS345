@@ -37,17 +37,27 @@ public class Player{
 			//activeActor = true;
 	}
 
-	public void work(){
+	public void work(String workType){
 		if(!activeActor){
 			setRole();
 		}
 		if(activeActor){
 			//ask user for rehearse or act
-				//if rehearse
-				//	dice.increaseAC();
-				//if act
-				//	dice.roll();
-				//	int actingEffort = dice.actRoll();
+				if(workType.equals("rehearse")){
+					dice.increaseAC();
+				}
+				
+				if (workType.equals("act")){
+					dice.roll();
+					int actingEffort = dice.actRoll();
+					boolean isSucc = currLocation.isActSuccess(actingEffort);
+					if(isSucc){
+
+					}else{
+
+					}
+				}
+
 				//	--->send actingEffort to currLocation to retreive true or false
 				//		,will check if budget is less than or equal to actingEffort
 				//	if(successAct){

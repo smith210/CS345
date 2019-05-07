@@ -47,4 +47,21 @@ public class Set{
 		return availActors; //returns a list of avail actors player can choose from 
 
 	}
+
+	public boolean isActSuccess(int roll){
+		boolean actingAttempt = film.evaluateActing(roll);
+		return actingAttempt;
+
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
