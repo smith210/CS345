@@ -25,8 +25,8 @@ public class Work{
 		isWorking = true;
 	}
 	
-	public void setWorkType(String type){
-		workType = type;
+	public String getWorkType(){
+		return workType;
 	}
 	//public abstract int payout(boolean isActSuccess);
 

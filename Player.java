@@ -23,18 +23,31 @@ public class Player{
 		playerName = name;
 	}
 
+	public String getPlayerName(){
+		return playerName;
+	}
+	
 	public void move(Set newLocation){
 	//check if new location is adjacent to current location
 
 		//Set currLocation = newLocation; 
 
 	}
-
+	
+	public int getActorLevel(){
+		return actorLevel;
+	
+	}
+	
 	public void setRole(){
 		//if there is available work within the player's level
 			//return available work
 			//have user pick work
 			//activeActor = true;
+	}
+	
+	public Work getWork(){
+		return jobDescription;
 	}
 
 	public void work(String workType){

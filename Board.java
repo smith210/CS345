@@ -4,10 +4,13 @@ public class Board{
 	private LinkedList<Player> users;
 	private LinkedList<Set> tiles;
 	private int round;
+	private int display;
 	
 	Board(int playerNum){
 		users = new LinkedList<Player>();
-		//figure out how to initialize tiles		
+		createPlayers(playerNum);
+		//figure out how to initialize tiles	
+		display = 1;	
 		round = 4;
 
 		if(playerNum == 2){
@@ -15,9 +18,10 @@ public class Board{
 		}
 	}
 	
-	public void createPlayers(int playerNum){
+	private void createPlayers(int playerNum){
 		for(int i = 0; i < playerNum; i++){
 			Player temp = new Player();
+			temp.setPlayerName("Player " + (i+1));
 			users.add(temp);
 		}
 	}
@@ -27,12 +31,16 @@ public class Board{
 	}
 
 	public int displayRound(){
-		int currRound = (round - round - 1) * (-1);
-		return currRound;
+		return display;
+	}
+
+	public int getRound(){
+		return round;
 	}
 
 	public void nextRound(){
 		round = round - 1;
+		display = display + 1;
 	}
 
 	public void takeTurn(Player p){

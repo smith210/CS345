@@ -15,6 +15,7 @@ public class Set{
 	public void DecrementShotCounter(){
 		shotCounter = shotCounter--;
 		if(shotCounter== 0){
+			finishedShoot = true;
 			// check scene to see if there were any main actors
 			// if so, do a bonus payout!
 		}			
