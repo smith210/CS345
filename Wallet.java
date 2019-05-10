@@ -2,8 +2,8 @@ public class Wallet{
 	private int dollars;
 	private int credits;
 
-	public int calculatePoints(){
-		int points = dollars + credits;
+	public int calculatePoints(int level){
+		int points = dollars + credits + (5 * level);
 		return points;
 	}
 

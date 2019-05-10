@@ -5,6 +5,12 @@ public class Work{
 	private boolean isWorking;
 	private String workType;
 
+	Work(){
+		workLevel = 1;
+		isWorking = false;
+		workType = "none";
+	}
+
 	public int getWorkLevel(){
 		return workLevel;
 	}

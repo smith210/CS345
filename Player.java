@@ -13,7 +13,8 @@ public class Player{
 	Player(){
 		playerName = "";//haven't thought about default name yet
 		actorLevel = 1;
-		//currLocation = trailer; We don't know how to implement yet
+		currLocation = new Location();
+		currLocation.getTrailer();
 		myWallet = new Wallet();
 		jobDescription = new Work();
 		dice = new Roll();
@@ -22,11 +23,46 @@ public class Player{
 	public void setPlayerName(String name){
 		playerName = name;
 	}
-
-	public String getPlayerName(){
-		return playerName;
-	}
 	
+	public void takeTurn(){
+		System.out.println(playerName+ " level: " + actorLevel);
+		System.out.println(jobDescription.getWorkType() + " " + activeActor);
+		System.out.println("location: " + currLocation.getLocationName());
+			
+		boolean finishTurn = false;
+		boolean hasMoved = false;
+		while(!finishTurn){
+			if(activeActor){
+				work();
+				finishTurn = true;
+			}else{
+				String userInput = getUserInput("Enter your move: ");
+				switch(userInput){
+					case "MOVE":
+						if(!activeActor && !hasMoved){
+							System.out.println("move successful!");
+							hasMoved = true;
+						}else{
+							System.out.println("you are not allowed to move");
+						}
+						break;
+					case "UPGRADE":
+						break;
+					case "WORK":
+						work();
+						finishTurn = true;
+						break;
+					case "END":
+						finishTurn = true;
+						break;
+					default:
+						System.out.print("INVALID MOVE. ");		
+				}
+			}
+		}
+		System.out.println(" ");
+	}
+
 	public void move(Location newLocation){
 	//check if new location is adjacent to current location
 
@@ -34,46 +70,43 @@ public class Player{
 
 	}
 	
-	public int getActorLevel(){
-		return actorLevel;
 	
-	}
-	
-	public void setRole(){
+	private void setRole(){
 		//if there is available work within the player's level
 			//return available work
 			//have user pick work
-			//activeActor = true;
+			activeActor = true;
 	}
 
-	public boolean getWorkStatus(){
-		return activeActor;
-	}
-	
-	public Work getWork(){
-		return jobDescription;
-	}
-
-	public void work(String workType){
+	public void work(){
 		if(!activeActor){
 			setRole();
 		}
 		if(activeActor){
-			//ask user for rehearse or act
-				if(workType.equals("rehearse")){
-					dice.increaseAC();
-				}
-				
-				if (workType.equals("act")){
-					dice.roll();
-					int actingEffort = dice.actRoll();
-					boolean isSucc = currLocation.getSet().isActSuccess(actingEffort);
-					if(isSucc){
+			boolean validInput = false;
+			while(!validInput){
+				String userInput = getUserInput("What do you want to work on: ");
 
-					}else{
+				switch(userInput){
+					case "REHEARSE":
+						validInput = true;
+						dice.increaseAC();
+						break;
+					case "ACT":
+						validInput = true;
+						dice.roll();
+						int actingEffort = dice.actRoll();
+						boolean isSucc = currLocation.getSet().isActSuccess(actingEffort);
+						if(isSucc){
 
-					}
+						}else{
+
+						}
+						break;
+					default:
+						System.out.print("INVALID WORK. ");	
 				}
+			}
 
 				//	--->send actingEffort to currLocation to retreive true or false
 				//		,will check if budget is less than or equal to actingEffort
@@ -87,6 +120,14 @@ public class Player{
 				//		if acting_type == extra --> pay
 				//		
 		}
+	}
+	
+	private String getUserInput(String query){
+			System.out.print(query);
+			Scanner scn = new Scanner(System.in);
+			String userInput = scn.nextLine();
+			userInput = userInput.toUpperCase();
+			return userInput;
 	}
 	
 	public void upgrade(int upgradeLevel){

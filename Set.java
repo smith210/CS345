@@ -9,9 +9,10 @@ public class Set{
 	Set(){
 		shotCounter = 3;
 		finishedShoot = false;
-		//figure out how to initialize actors and scene
-
+		film = new Scene();
+		actors = new LinkedList<ExtraRole>();
 	}
+
 	public void DecrementShotCounter(){
 		shotCounter = shotCounter--;
 		if(shotCounter== 0){

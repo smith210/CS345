@@ -58,10 +58,6 @@ public class Board{
 		display = display + 1;
 	}
 
-	public void takeTurn(Player p){
-		//based on user input, initiate the player's turn (work, move, upgrade)
-	}
-
 	public Player evaluateWinner(){
 		boolean evalWinner = false;
 		Player winner = new Player();

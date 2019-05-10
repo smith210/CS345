@@ -1,4 +1,7 @@
 public class Location{
+	private final int rowMax = 7;
+	private final int colMax = 5;
+
 	private String name;
 	private Set workSpace;
 	private int rowNum;
@@ -9,6 +12,13 @@ public class Location{
 		workSpace = new Set();
 		rowNum = 0;
 		colNum = 0;
+	}
+	
+	//will remove function later for functionality
+	public void getTrailer(){
+		setName("Trailer");
+		rowNum = 2;
+		colNum = 3;
 	}
 
 	public void setName(String setName){
