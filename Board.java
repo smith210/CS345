@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Board{
 	private LinkedList<Player> users;
-	private LinkedList<Set> tiles;
+	private LinkedList<Location> tiles;
 	private int round;
 	private int display;
 	
@@ -24,6 +24,21 @@ public class Board{
 			temp.setPlayerName("Player " + (i+1));
 			users.add(temp);
 		}
+	}
+
+	public boolean checkFinishRound(){
+		boolean finishRound = true;		
+		for(int i = 0; i < tiles.size(); i++){
+			Location currTile = tiles.get(i);
+			Set film = currTile.getSet();
+			if(currTile.isPlayableSet()){
+				if(film.getShotCounter() != 0){
+					finishRound = false;
+				}
+			}
+		}
+		return finishRound;
+	
 	}
 
 	public LinkedList<Player> getPlayers(){

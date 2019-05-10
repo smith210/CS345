@@ -4,7 +4,7 @@ public class Player{
 
 	private String playerName;
 	private int actorLevel;
-	private Set currLocation;
+	private Location currLocation;
 	private Wallet myWallet;
 	private boolean activeActor;
 	private Work jobDescription;
@@ -27,7 +27,7 @@ public class Player{
 		return playerName;
 	}
 	
-	public void move(Set newLocation){
+	public void move(Location newLocation){
 	//check if new location is adjacent to current location
 
 		//Set currLocation = newLocation; 
@@ -44,6 +44,10 @@ public class Player{
 			//return available work
 			//have user pick work
 			//activeActor = true;
+	}
+
+	public boolean getWorkStatus(){
+		return activeActor;
 	}
 	
 	public Work getWork(){
@@ -63,7 +67,7 @@ public class Player{
 				if (workType.equals("act")){
 					dice.roll();
 					int actingEffort = dice.actRoll();
-					boolean isSucc = currLocation.isActSuccess(actingEffort);
+					boolean isSucc = currLocation.getSet().isActSuccess(actingEffort);
 					if(isSucc){
 
 					}else{
