@@ -1,40 +1,40 @@
-Evil Wears a Hat	4	
-Square Deal City	6
-Law and the Old West	3
-Davy Crockett: A Drunkard’s Tale	4
-The Life and Times of John Skywater	5
-The Way the West Was Run	4
-My Years on the Prairie	5
-Down in the Valley	3
-Buffalo Bill: The Lost Years	4
-Ol’ Shooter and Little Doll	4
-The Robbers of Trains	4
-Jesse James: Man of Action	5
-Beyond the Pail: Life without Lactose	2
-Disaster at Flying J	5
-A Man Called “Cow”	3
-Shakespeare in Lubbock	3
-Taffy Commercial	2
-Go West, You!	3
-Gum Commercial	2
-The Life and Times of John Skywater	5
-Gun! The Musical	6
-One False Step for Mankind	6
-Humor at the Expense of Others	5
-Thirteen the Hard Way	5
-The Search for Maggie White	6
-How They Get Milk	4
-Picante Sauce Commercial	2
-My Years on the Prairie	5
-Jesse James: Man of Action	5
-Davy Crockett: A Drunkard’s Tale	4
-Czechs in the Sonora	4
-J. Robert Lucky, Man of Substance	4
-Swing 'em Wide	6
-Thirteen the Hard Way	5
-Swing 'em Wide	6
-How They Get Milk	4
-Trials of the First Pioneers	4
-Breakin’ in Trick Ponies	3
-How the Grinch Stole Texas	5	
-Custer’s Other Stands	5
+Evil Wears a Hat|7|4|
+Square Deal City|14|6|
+Law and the Old West|20|3|
+Davy Crockett: A Drunkard’s Tale|31|4|
+The Life and Times of John Skywater|22|5|
+The Way the West Was Run|34|4|
+My Years on the Prairie|32|5|
+Down in the Valley|24|3|
+Buffalo Bill: The Lost Years|12|4|
+Ol’ Shooter and Little Doll|14|4|
+The Robbers of Trains|19|4|
+Jesse James: Man of Action|8|5|
+Beyond the Pail: Life without Lactose|12|2|
+Disaster at Flying J|6|5|
+A Man Called “Cow”|16|3|
+Shakespeare in Lubbock|23|3|
+Taffy Commercial|2|2|
+Go West, You!|30|3|
+Gum Commercial|3|2|
+The Life and Times of John Skywater| 15|5|
+Gun! The Musical|25|6|
+One False Step for Mankind|21|6|
+Humor at the Expense of Others|16|5|
+Thirteen the Hard Way|15|5|
+The Search for Maggie White|12|6|
+How They Get Milk|2|4|
+Picante Sauce Commercial|1|2|
+My Years on the Prairie|27|5|
+Jesse James: Man of Action|14|5|
+Davy Crockett: A Drunkard’s Tale|12|4|
+Czechs in the Sonora|25|4|
+J. Robert Lucky, Man of Substance|13|4|
+Swing 'em Wide|19|6|
+Thirteen the Hard Way|17|5|
+Swing 'em Wide|35|6|
+How They Get Milk|8|4|
+Trials of the First Pioneers|5|4|
+Breakin’ in Trick Ponies|19|3|
+How the Grinch Stole Texas|9|5|
+Custer’s Other Stands|40|5|
