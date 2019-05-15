@@ -15,21 +15,16 @@ public class Deadwood{
 		boolean isPlaying = true;
 		while(isPlaying){
 			System.out.println("ROUND " + currGame.displayRound());
-			for(int i = 0; i < currGame.getPlayers().size(); i++){
-				Player p = currGame.getPlayers().get(i);
-				p.takeTurn();
-				//evaluate if reached end of round
-					//currGame.nextRound();
-
-				
-			}
+			currGame.iterateRound();
 			//might contain a while loop to keep playing the game until player quits.
 			//if user wants to quit, exit loop
-			//if(currGame.checkFinishRound()){			
+			/*if(currGame.checkFinishRound()){
 				currGame.nextRound();
-			//}
+			}*/
+			currGame.nextRound();
 			if(currGame.getRound() == 0){
 				isPlaying = false;
+				//Player winner = currGame.evaluateWinner()
 			}
 		}
 	}

@@ -11,13 +11,9 @@ public class Work{
 		workType = "none";
 	}
 
-	public int getWorkLevel(){
-		return workLevel;
-	}
+	public int getWorkLevel(){ return workLevel; }
 
-	public boolean getWorkStatus(){
-		return isWorking;
-	}
+	public boolean getWorkStatus(){	return isWorking; }
 
 	public boolean canWork(int playerLevel){
 		if(workLevel <= playerLevel){
@@ -27,12 +23,13 @@ public class Work{
 		}
 	}
 	
-	public void bufWork(){
-		isWorking = true;
-	}
+	public void bufWork(){ isWorking = true; }
 	
-	public String getWorkType(){
-		return workType;
+	public String getWorkType(){ return workType; }
+	
+	public void display(){
+		System.out.print(workType);
+		System.out.print("  " + workLevel);
 	}
 	//public abstract int payout(boolean isActSuccess);
 

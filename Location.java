@@ -1,37 +1,28 @@
 public class Location{
-	private final int rowMax = 7;
-	private final int colMax = 5;
 
 	private String name;
 	private Set workSpace;
-	private int rowNum;
-	private int colNum;
+	private int ID;
+	private int[] neighbors;
 
 	Location(){
 		name = "";
 		workSpace = new Set();
-		rowNum = 0;
-		colNum = 0;
+		ID = 0;
+		neighbors = new int[4];
 	}
+
+	public void setID(int ID){ this.ID = ID; }
+
+	public void setName(String setName){ name = setName; }
+
+	public void setNeighbors(int[] neighbors){ this.neighbors = neighbors; }
+
+	public String getLocationName(){ return name; }
+
+	public Set getSet(){ return workSpace; }
 	
-	//will remove function later for functionality
-	public void getTrailer(){
-		setName("Trailer");
-		rowNum = 2;
-		colNum = 3;
-	}
-
-	public void setName(String setName){
-		name = setName;
-	}
-
-	public String getLocationName(){
-		return name;
-	}
-
-	public Set getSet(){
-		return workSpace;
-	}
+	public int getID(){ return ID; }
 
 	public boolean isPlayableSet(){
 		boolean workableSet = true;

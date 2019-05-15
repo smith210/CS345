@@ -14,20 +14,20 @@ public class Player{
 		playerName = "";//haven't thought about default name yet
 		actorLevel = 1;
 		currLocation = new Location();
-		currLocation.getTrailer();
 		myWallet = new Wallet();
 		jobDescription = new Work();
 		dice = new Roll();
 	}
+	public void setLocation(Location location){ currLocation = location; }
 
-	public void setPlayerName(String name){
-		playerName = name;
-	}
+	public void setPlayerName(String name){ playerName = name; }
 	
+	public int getLevel(){ return actorLevel; }
+
 	public void takeTurn(){
 		System.out.println(playerName+ " level: " + actorLevel);
 		System.out.println(jobDescription.getWorkType() + " " + activeActor);
-		System.out.println("location: " + currLocation.getLocationName());
+		System.out.println("location: " + currLocation.getID());
 			
 		boolean finishTurn = false;
 		boolean hasMoved = false;
@@ -72,10 +72,33 @@ public class Player{
 	
 	
 	private void setRole(){
-		//if there is available work within the player's level
-			//return available work
-			//have user pick work
-			activeActor = true;
+		/*Set actingSpace = currLocation.getSet();
+		LinkedList<Work> availableWork = actingSpace.findAvailWork(actorLevel);
+		if(availableWork.size() != 0){
+			for(int jobNum = 0; jobNum < availableWork.size(); jobNum++){
+				availableWork.get(jobNum).display();
+			}
+			boolean validInput = false;
+			while(!validInput){
+				String userInput = getUserInput("Which Role do You Want? If you want no Role, type \'no\'");
+				try{
+					if(Integer.parseInt(userInput) < availableWork.size()){
+						jobDescription = availableWork.get(Integer.parseInt(userInput));
+						activeActor = true;
+						validInput = true;
+					}
+				}catch(Exception e){
+					if(userInput.equals("no"){
+						validInput = true;
+					}else{
+						System.out.print("INVALID COMMAND. ");
+					}
+				}
+			}
+				
+			*/
+			//activeActor = true;
+		//}
 	}
 
 	public void work(){
@@ -139,9 +162,7 @@ public class Player{
 			//currLocation = CastingOffice;
 	}
 
-	public Wallet evalWalletContent(){
-		return myWallet;
-	}
+	public Wallet evalWalletContent(){ return myWallet; }
 
 
 }

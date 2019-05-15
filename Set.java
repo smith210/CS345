@@ -23,9 +23,7 @@ public class Set{
 			
 	}
 
-	public int getShotCounter(){
-		return shotCounter;
-	}	
+	public int getShotCounter(){ return shotCounter; }	
 
 	private void scenePayout(){
 		// we'll get there :)
