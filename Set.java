@@ -7,10 +7,18 @@ public class Set{
 	private boolean finishedShoot;
 	
 	Set(){
-		shotCounter = 3;
-		finishedShoot = false;
+		shotCounter = 0;
+		finishedShoot = true;
 		film = new Scene();
 		actors = new LinkedList<ExtraRole>();
+	}
+
+	public void createExtras(LinkedList<ExtraRole> actors){ this.actors = actors; }
+	public void setScene(Scene film){ this.film = film; }
+
+	public void setShotCounter(int shots){ 
+		finishedShoot = false;		
+		shotCounter = shots; 
 	}
 
 	public void DecrementShotCounter(){

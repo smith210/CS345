@@ -1,15 +1,19 @@
 import java.util.*;
 
 public class Scene{
+	private String sceneName;
+	private int sceneNum;
 	private LinkedList<MainRole> actors;
 	private int movieBudget;
 	private boolean isDisplayed;
 
-	public void displayScene(){
+	
 
-		isDisplayed = true;
-
-	}
+	public void displayScene(){ isDisplayed = true; }
+	public void setName(String sceneName){ this.sceneName = sceneName; }
+	public void setID(int sceneID){ sceneNum = sceneID; }
+	public void setBudget(int movieBudget){ this.movieBudget = movieBudget; }
+	public void createMains(LinkedList<MainRole> actors){ this.actors = actors; } 
 	
 	public boolean evaluateActing(int roll){
 

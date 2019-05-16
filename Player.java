@@ -24,12 +24,15 @@ public class Player{
 	
 	public int getLevel(){ return actorLevel; }
 
+	public Location getLocation(){ return currLocation; }
+
 	public void takeTurn(){
 		System.out.println(playerName+ " level: " + actorLevel);
 		System.out.println(jobDescription.getWorkType() + " " + activeActor);
-		System.out.println("location: " + currLocation.getID());
+		System.out.println("location: " + currLocation.getLocationName());
 			
 		boolean finishTurn = false;
+		boolean hasWorked = false;
 		boolean hasMoved = false;
 		while(!finishTurn){
 			if(activeActor){
@@ -40,7 +43,27 @@ public class Player{
 				switch(userInput){
 					case "MOVE":
 						if(!activeActor && !hasMoved){
-							System.out.println("move successful!");
+							LinkedList<Location> neighborhood = currLocation.getNeighbors();
+							for(int ID = 0; ID < neighborhood.size(); ID++){
+								Location nextDoor = neighborhood.get(ID);						
+								System.out.println(ID + ": " + nextDoor.getLocationName());
+							}
+							boolean validNeighbor = false;
+							int desiredMove = 0;
+							while(!validNeighbor){
+								try{						
+									desiredMove = Integer.parseInt(getUserInput("Where do you want to move(list the ID): "));
+									if(desiredMove < 0 || desiredMove >= neighborhood.size()){
+										System.out.print("Not a valid input. ");
+									}else{
+										validNeighbor = true;
+									}
+								}catch(Exception e){
+									System.out.println("You must input the ID associated with the location. ");
+								}
+							}
+							setLocation(neighborhood.get(desiredMove));
+							System.out.println("move successful! You are now in " + currLocation.getLocationName());
 							hasMoved = true;
 						}else{
 							System.out.println("you are not allowed to move");
@@ -49,8 +72,16 @@ public class Player{
 					case "UPGRADE":
 						break;
 					case "WORK":
-						work();
-						finishTurn = true;
+						if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
+							work();
+							hasWorked = true;
+						}else{
+							if(hasWorked){
+								System.out.println("you already worked");
+							}else{
+								System.out.println("you are not allowed to work here");
+							}						
+						}
 						break;
 					case "END":
 						finishTurn = true;
@@ -62,17 +93,10 @@ public class Player{
 		}
 		System.out.println(" ");
 	}
-
-	public void move(Location newLocation){
-	//check if new location is adjacent to current location
-
-		//Set currLocation = newLocation; 
-
-	}
 	
 	
 	private void setRole(){
-		/*Set actingSpace = currLocation.getSet();
+		Set actingSpace = currLocation.getSet();
 		LinkedList<Work> availableWork = actingSpace.findAvailWork(actorLevel);
 		if(availableWork.size() != 0){
 			for(int jobNum = 0; jobNum < availableWork.size(); jobNum++){
@@ -88,7 +112,7 @@ public class Player{
 						validInput = true;
 					}
 				}catch(Exception e){
-					if(userInput.equals("no"){
+					if(userInput.equals("no")){
 						validInput = true;
 					}else{
 						System.out.print("INVALID COMMAND. ");
@@ -96,9 +120,9 @@ public class Player{
 				}
 			}
 				
-			*/
+			
 			//activeActor = true;
-		//}
+		}
 	}
 
 	public void work(){

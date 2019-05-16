@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Work{
+	private String jobTitle;
 	private int workLevel;
 	private boolean isWorking;
 	private String workType;
@@ -10,6 +11,12 @@ public class Work{
 		isWorking = false;
 		workType = "none";
 	}
+
+	public void setJobTitle(String jobTitle){ this.jobTitle = jobTitle; }
+	public void setWorkLevel(int workLevel){ this.workLevel = workLevel; }
+	public void setWorkType(String workType){ this.workType = workType; }
+
+	public String getJobTitle(){ return jobTitle; }
 
 	public int getWorkLevel(){ return workLevel; }
 
@@ -29,7 +36,8 @@ public class Work{
 	
 	public void display(){
 		System.out.print(workType);
-		System.out.print("  " + workLevel);
+		System.out.print(" " + jobTitle);
+		System.out.println("  " + workLevel);
 	}
 	//public abstract int payout(boolean isActSuccess);
 
