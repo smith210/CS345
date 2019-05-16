@@ -35,93 +35,111 @@ public class Player{
 		boolean hasWorked = false;
 		boolean hasMoved = false;
 		while(!finishTurn){
-			if(activeActor){
-				work();
-				finishTurn = true;
-			}else{
-				String userInput = getUserInput("Enter your move: ");
-				switch(userInput){
-					case "MOVE":
-						if(!activeActor && !hasMoved){
-							LinkedList<Location> neighborhood = currLocation.getNeighbors();
-							for(int ID = 0; ID < neighborhood.size(); ID++){
-								Location nextDoor = neighborhood.get(ID);						
-								System.out.println(ID + ": " + nextDoor.getLocationName());
-							}
-							boolean validNeighbor = false;
-							int desiredMove = 0;
-							while(!validNeighbor){
-								try{						
-									desiredMove = Integer.parseInt(getUserInput("Where do you want to move(list the ID): "));
-									if(desiredMove < 0 || desiredMove >= neighborhood.size()){
-										System.out.print("Not a valid input. ");
-									}else{
-										validNeighbor = true;
-									}
-								}catch(Exception e){
-									System.out.println("You must input the ID associated with the location. ");
-								}
-							}
+
+			String userInput = getUserInput("Enter your move: ");
+			switch(userInput){
+				case "MOVE":
+					if(!activeActor && !hasMoved){
+						LinkedList<Location> neighborhood = currLocation.getNeighbors();
+						for(int ID = 0; ID < neighborhood.size(); ID++){
+							Location nextDoor = neighborhood.get(ID);						
+							System.out.println(ID + ": " + nextDoor.getLocationName());
+						}
+						String moveInput = "";
+						int desiredMove = getIntInput("Where do you want to move to?",
+														"move", neighborhood.size());
+						if(desiredMove != -1){
 							setLocation(neighborhood.get(desiredMove));
 							System.out.println("move successful! You are now in " + currLocation.getLocationName());
 							hasMoved = true;
-						}else{
-							System.out.println("you are not allowed to move");
 						}
-						break;
-					case "UPGRADE":
-						break;
-					case "WORK":
-						if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
+		
+					}else{
+						System.out.println("you are not allowed to move");
+					}
+					break;
+				case "UPGRADE":
+
+					if(!activeActor && currLocation.getID() == 8){
+						System.out.println("in the right area to level up");
+						int levelDesired = getIntInput("What level do you want to level up to?", "upgrade", 6);
+					}else{
+						System.out.println("you cannot Upgrade in the " + currLocation.getLocationName());
+					}
+					break;
+				case "WORK":
+					if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
+						if(!hasMoved){ 
 							work();
-							hasWorked = true;
-						}else{
-							if(hasWorked){
-								System.out.println("you already worked");
-							}else{
-								System.out.println("you are not allowed to work here");
-							}						
+						}else{ 
+							setRole(); 
 						}
-						break;
-					case "END":
-						finishTurn = true;
-						break;
-					default:
-						System.out.print("INVALID MOVE. ");		
-				}
+						
+						if(activeActor){ hasWorked = true; }
+					}else{
+						if(hasWorked){
+							System.out.println("you already worked");
+						}else{
+							System.out.println("you are not allowed to work here");
+						}						
+					}
+					break;
+				case "END":
+					finishTurn = true;
+					break;
+				default:
+					System.out.print("INVALID MOVE. ");		
 			}
 		}
 		System.out.println(" ");
 	}
 	
-	
+	private int getIntInput(String prompt, String action, int listSize){
+		int intInput = -1;
+		boolean validInput = false;
+		while(!validInput){
+			String userInput = getUserInput(prompt + " (if you don't want to " + action + ", type \"no\"): ");
+			try{
+				if(Integer.parseInt(userInput) < 0 || Integer.parseInt(userInput) < listSize){
+					intInput = Integer.parseInt(userInput);
+					validInput = true;
+				}else{
+					System.out.println("The ID does not correspond with one of the listed IDs.");
+				}
+			}catch(Exception e){
+				if(userInput.equals("NO")){
+					validInput = true;
+				}else{
+					System.out.println("You must input the ID associated with your choice in order to " + action + ".");
+				}
+			}
+		}
+		return intInput;
+	}	
+
 	private void setRole(){
 		Set actingSpace = currLocation.getSet();
 		LinkedList<Work> availableWork = actingSpace.findAvailWork(actorLevel);
+		System.out.println("Set being filmed: " + actingSpace.getSceneDesc() );
+
 		if(availableWork.size() != 0){
+			System.out.println("Available Jobs within your Acting Level: ");
+
 			for(int jobNum = 0; jobNum < availableWork.size(); jobNum++){
+				System.out.print(jobNum + ": ");
 				availableWork.get(jobNum).display();
 			}
 			boolean validInput = false;
-			while(!validInput){
-				String userInput = getUserInput("Which Role do You Want? If you want no Role, type \'no\'");
-				try{
-					if(Integer.parseInt(userInput) < availableWork.size()){
-						jobDescription = availableWork.get(Integer.parseInt(userInput));
-						activeActor = true;
-						validInput = true;
-					}
-				}catch(Exception e){
-					if(userInput.equals("no")){
-						validInput = true;
-					}else{
-						System.out.print("INVALID COMMAND. ");
-					}
-				}
+			int roleID = getIntInput("Which Role do You Want?", "work", availableWork.size());
+			if(roleID != -1){
+				jobDescription = availableWork.get(roleID);
+				jobDescription.bufWork();
+				activeActor = true;
+				System.out.println("Congrats, you are now working on " + jobDescription.getJobTitle());
 			}
 				
-			
-			//activeActor = true;
+		}else{
+			System.out.println("There are no available jobs within your experience to work on");
 		}
 	}
 
@@ -144,11 +162,11 @@ public class Player{
 						dice.roll();
 						int actingEffort = dice.actRoll();
 						boolean isSucc = currLocation.getSet().isActSuccess(actingEffort);
-						if(isSucc){
+						/*if(isSucc){
 
 						}else{
 
-						}
+						}*/
 						break;
 					default:
 						System.out.print("INVALID WORK. ");	

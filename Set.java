@@ -4,11 +4,9 @@ public class Set{
 	private LinkedList<ExtraRole> actors;
 	private int shotCounter;
 	private Scene film;
-	private boolean finishedShoot;
 	
 	Set(){
 		shotCounter = 0;
-		finishedShoot = true;
 		film = new Scene();
 		actors = new LinkedList<ExtraRole>();
 	}
@@ -16,25 +14,32 @@ public class Set{
 	public void createExtras(LinkedList<ExtraRole> actors){ this.actors = actors; }
 	public void setScene(Scene film){ this.film = film; }
 
-	public void setShotCounter(int shots){ 
-		finishedShoot = false;		
-		shotCounter = shots; 
-	}
+	public void setShotCounter(int shots){ shotCounter = shots; }
 
 	public void DecrementShotCounter(){
-		shotCounter = shotCounter--;
-		if(shotCounter== 0){
-			finishedShoot = true;
-			// check scene to see if there were any main actors
-			// if so, do a bonus payout!
-		}			
-			
+		if(shotCounter != 0){
+			shotCounter = shotCounter - 1;
+		}	
 	}
+
+	public String getSceneDesc(){ return film.getName() + " scene no. " + film.getSceneNum(); }
 
 	public int getShotCounter(){ return shotCounter; }	
 
 	private void scenePayout(){
 		// we'll get there :)
+	}
+
+	public LinkedList<Work> listAllWork(){
+		LinkedList<Work> actingJobs = new LinkedList<Work>();
+		LinkedList<MainRole> main = film.getMainActors();
+		for(int i = 0; i < main.size(); i ++){
+			actingJobs.add(main.get(i));
+		}
+		for(int j = 0; j < actors.size(); j++){
+			actingJobs.add(actors.get(j));
+		}
+		return actingJobs;
 	}
 
 	public LinkedList<Work> findAvailWork(int playerLevel){

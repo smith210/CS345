@@ -10,8 +10,7 @@ public class SceneDeck{
 	}
 
 	public Scene drawCard(){
-		Random rand = new Random();
-		int cardID = rand.nextInt(cardDeck.size());
+		int cardID = (int) (Math.random() * cardDeck.size());
 		Scene chosenScene = cardDeck.get(cardID);
 		cardDeck.remove(cardID);
 		
@@ -37,6 +36,7 @@ public class SceneDeck{
 					}else{
 						main.setWorkLevel(Integer.parseInt(spliced[i]));
 						mainCast.add(main);
+						main = new MainRole();
 					}
 				}
 				scene.createMains(mainCast);

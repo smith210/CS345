@@ -14,6 +14,8 @@ public class Scene{
 	public void setID(int sceneID){ sceneNum = sceneID; }
 	public void setBudget(int movieBudget){ this.movieBudget = movieBudget; }
 	public void createMains(LinkedList<MainRole> actors){ this.actors = actors; } 
+	public String getName(){ return sceneName; }
+	public int getSceneNum(){ return sceneNum; }
 	
 	public boolean evaluateActing(int roll){
 
@@ -23,6 +25,8 @@ public class Scene{
 			return false;
 		}
  	}
+
+	public LinkedList<MainRole> getMainActors(){ return actors; }	
 
 	public LinkedList<MainRole> findMainActor(int playerLevel){
 

@@ -21,6 +21,15 @@ public class GameTiles{
 	
 	public int size(){ return tiles.size(); }
 
+	public boolean isBoardWrapped(){
+		boolean finishedRound = true;
+		for(int i = 0; i < tiles.size(); i++){
+			int currCounters = tiles.get(i).getSet().getShotCounter();
+			if(currCounters != 0){ finishedRound = false; }
+		}
+		return finishedRound;
+	}
+
 	public void drawScenes(){
 		for(int i = 0; i < tiles.size(); i++){
 			tiles.get(i).getSet().setScene(deck.drawCard());
@@ -55,14 +64,6 @@ public class GameTiles{
 		return ID;
 	}
 
-	private boolean validNeighbor(int ID){
-		if(ID != 0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
 	private void initializeNeighbors(){		
 		int neighborLeft = 2;
 		int neighborRight = 8;
@@ -71,11 +72,11 @@ public class GameTiles{
 		for(int ID = 1; ID <= 12; ID++){
 			LinkedList<Location> neighbors = new LinkedList<Location>();
 			Location spot = get(ID);
-			System.out.println(spot.getLocationName() + ": " + neighborLeft + " " + neighborRight + " " + neighborDown + " " + neighborUp);
+			
 			neighbors.add(get(neighborLeft));
 			neighbors.add(get(neighborRight));
 			neighbors.add(get(neighborDown));
-			if(validNeighbor(neighborUp)){			
+			if(neighborUp != 0){
 				neighbors.add(get(neighborUp));
 			}
 			spot.setNeighbors(neighbors);	
@@ -121,6 +122,7 @@ public class GameTiles{
 						}else{
 							extra.setWorkLevel(Integer.parseInt(spliced[i]));
 							listExtras.add(extra);
+							extra = new ExtraRole();
 						}
 					}
 					loc.getSet().createExtras(listExtras);

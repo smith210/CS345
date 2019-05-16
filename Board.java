@@ -29,15 +29,27 @@ public class Board{
 
 	public void iterateRound(){
 		tiles.drawScenes();
-		for(int i = 0; i < users.size(); i++){
+		System.out.println("BEGINNING OF ROUND " + display);
+		System.out.println(" ");
+		int i = 0;
+		while(!hasFinishedRound()){
 			Player p = users.get(i);
-			Location l = p.getLocation();
 			p.takeTurn();
-			//evaluate if reached end of round
-			//currGame.nextRound();
-			
+			i = i + 1;
+			if(i == users.size()){ 
+				i = 0; 
+			}
 		}
+		System.out.println("END OF ROUND " + getRound());
+		if(getRound() == 0){
+			//Player winner = currGame.evaluateWinner()
+		}else{
+			nextRound();
+		}
+
 	}
+
+	public boolean hasFinishedRound(){ return tiles.isBoardWrapped(); }
 
 	public LinkedList<Player> getPlayers(){
 		return users;
