@@ -37,27 +37,30 @@ public class Board{
 			p.takeTurn();
 			Set pSet = p.getLocation().getSet();
 			LinkedList<Player> onScene = getPlayers(p.getLocation());
-			if(pSet.getShotCounter() == 0 && pSet.getScene().hasMainActors()){
-				for(int i = 0; i < onScene.size(); i++){
-					Player actor = onScene.get(i);
-					String actorType = actor.getJob().getWorkType();
-					Wallet myWallet = actor.evalWalletContent();
-					switch(actorType){			
-						case "MAIN":
-							//myWallet.addCredits(2);
-							break;
-						case "EXTRA":
-							myWallet.addDollars(onScene.get(i).getJob().getWorkLevel());
-							break;
-						default:
+			if(pSet.getShotCounter() == 0){
+				if(pSet.getScene().hasMainActors()){
+					for(int i = 0; i < onScene.size(); i++){
+						Player actor = onScene.get(i);
+						String actorType = actor.getJob().getWorkType();
+						Wallet myWallet = actor.evalWalletContent();
+						switch(actorType){			
+							case "MAIN":
+								//myWallet.addDollars(2);
+								break;
+							case "EXTRA":
+								myWallet.addDollars(onScene.get(i).getJob().getWorkLevel());
+								break;
+							default:
+						}
 					}
+				}
+				for(int j = 0; j < onScene.size(); j++){
+					Player actor = onScene.get(j);
+					actor.removeWork();
 				}					
 	
 			}
-			for(int j = 0; j < onScene.size(); j++){
-				Player actor = onScene.get(i);
-				actor.removeWork();
-			}	
+	
 			num = num + 1;
 			if(num == users.size()){ 
 				num = 0; 

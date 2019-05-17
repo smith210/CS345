@@ -25,6 +25,8 @@ public class Player{
 	public void setLocation(Location location){ currLocation = location; }
 
 	public void setPlayerName(String name){ playerName = name; }
+
+	public String getPlayerName(){ return playerName; }
 	
 	public int getLevel(){ return actorLevel; }
 
@@ -33,6 +35,7 @@ public class Player{
 	public Work getJob(){ return jobDescription; }
 
 	public void removeWork(){
+		System.out.println(playerName + " has ended working.");
 		activeActor = false;
 		jobDescription = new Work();
 	}
@@ -86,6 +89,8 @@ public class Player{
 					break;
 				case "WORK":
 					if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
+						Set actingSpace = currLocation.getSet();
+						actingSpace.getSceneDesc();
 						if(!hasMoved){ 
 							work();
 						}else{ 
@@ -104,6 +109,9 @@ public class Player{
 				case "END":
 					finishTurn = true;
 					break;
+				case "AMOUNT":
+					myWallet.displayContent();
+					break;
 				default:
 					System.out.print("INVALID MOVE. ");		
 			}
@@ -114,7 +122,6 @@ public class Player{
 	private void setRole(){
 		Set actingSpace = currLocation.getSet();
 		LinkedList<Work> availableWork = actingSpace.findAvailWork(actorLevel);
-		System.out.println("Set being filmed: " + actingSpace.getSceneDesc() );
 
 		if(availableWork.size() != 0){
 			System.out.println("Available Jobs within your Acting Level: ");

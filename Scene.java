@@ -16,6 +16,17 @@ public class Scene{
 	public void createMains(LinkedList<MainRole> actors){ this.actors = actors; } 
 	public String getName(){ return sceneName; }
 	public int getSceneNum(){ return sceneNum; }
+	public int getBudget(){ return movieBudget; }
+
+	public int numMainActors(){ return actors.size(); }
+
+	public int getActingHierarchy(MainRole actor){
+		int position = 0;
+		while(position != actors.size() && actors.get(position).getWorkLevel() != actor.getWorkLevel()){
+			position++;
+		}
+		return position;
+	}
 	
 	public boolean evaluateActing(int roll){
 
@@ -52,6 +63,12 @@ public class Scene{
 			}
 		}
 		return availActors; //returns a list of avail actors player can choose from 
+
+	}
+
+	public void displayContent(){
+		System.out.println("Scene being filmed: " + sceneName + " scene no. " + sceneNum );
+		System.out.println("Budget of the film: $" + movieBudget );
 
 	}
 }

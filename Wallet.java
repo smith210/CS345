@@ -16,10 +16,27 @@ public class Wallet{
 	}
 
 	public void addDollars(int paycheck){
+		displayStatus(paycheck, "Dollar");
 		dollars = dollars + paycheck;
 	}
 
 	public void addCredits(int paycheck){
+		displayStatus(paycheck, "Credit");
 		credits = credits + paycheck;
+	}
+
+	private void displayStatus(int paycheck, String type){
+		if(paycheck >= 0){
+			System.out.print("Recieved payment of ");
+		}else{
+			System.out.print("Paying ");
+		}
+		System.out.println(paycheck + " " + type);
+	}
+
+	public void displayContent(){
+		System.out.print("You currently have: ");
+		System.out.print(dollars + " Dollars, ");
+		System.out.println(credits + " Credits.");
 	}
 }

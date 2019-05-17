@@ -23,7 +23,7 @@ public class Set{
 		}	
 	}
 
-	public String getSceneDesc(){ return film.getName() + " scene no. " + film.getSceneNum(); }
+	public void getSceneDesc(){ film.displayContent(); }
 
 	public int getShotCounter(){ return shotCounter; }	
 

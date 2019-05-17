@@ -30,5 +30,28 @@ public class Roll{
 		return actingCounters;
 	}
 
+	private int getIndexID(LinkedList<Integer> rolls, int currRoll){
+		int index = 0;
+		while(index != rolls.size() && rolls.get(index) > currRoll){
+			index++;
+		}
+		return index;
+	}
+
+	public LinkedList<Integer> bonusPayout(int budget){
+		LinkedList<Integer> allRolls = new LinkedList<Integer>();		
+		for(int i = 0; i < budget; i++){	
+			roll();
+			int currRoll = diceRoll;
+			int index = getIndexID(allRolls, currRoll);
+			if(index != allRolls.size()){
+				allRolls.add(index, currRoll);
+			}else{
+				allRolls.add(currRoll);
+			}
+		}
+		return allRolls;
+	}
+
 
 }
