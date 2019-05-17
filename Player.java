@@ -47,7 +47,7 @@ public class Player{
 						}
 						String moveInput = "";
 						int desiredMove = getIntInput("Where do you want to move to?",
-														"move", neighborhood.size());
+														"move", 0, neighborhood.size());
 						if(desiredMove != -1){
 							setLocation(neighborhood.get(desiredMove));
 							System.out.println("move successful! You are now in " + currLocation.getLocationName());
@@ -62,7 +62,7 @@ public class Player{
 
 					if(!activeActor && currLocation.getID() == 8){
 						System.out.println("in the right area to level up");
-						int levelDesired = getIntInput("What level do you want to level up to?", "upgrade", 6);
+						int levelDesired = getIntInput("What level do you want to level up to?", "upgrade", 1, 6);
 					}else{
 						System.out.println("you cannot Upgrade in the " + currLocation.getLocationName());
 					}
@@ -94,13 +94,13 @@ public class Player{
 		System.out.println(" ");
 	}
 	
-	private int getIntInput(String prompt, String action, int listSize){
+	private int getIntInput(String prompt, String action, int min, int max){
 		int intInput = -1;
 		boolean validInput = false;
 		while(!validInput){
 			String userInput = getUserInput(prompt + " (if you don't want to " + action + ", type \"no\"): ");
 			try{
-				if(Integer.parseInt(userInput) < 0 || Integer.parseInt(userInput) < listSize){
+				if(Integer.parseInt(userInput) >= min && Integer.parseInt(userInput) < max){
 					intInput = Integer.parseInt(userInput);
 					validInput = true;
 				}else{
@@ -130,7 +130,7 @@ public class Player{
 				availableWork.get(jobNum).display();
 			}
 			boolean validInput = false;
-			int roleID = getIntInput("Which Role do You Want?", "work", availableWork.size());
+			int roleID = getIntInput("Which Role do You Want?", "work", 0, availableWork.size());
 			if(roleID != -1){
 				jobDescription = availableWork.get(roleID);
 				jobDescription.bufWork();
