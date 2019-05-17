@@ -26,6 +26,18 @@ public class Scene{
 		}
  	}
 
+	public boolean hasMainActors(){
+		int curr = 0;		
+		while(curr != actors.size() && !actors.get(curr).getWorkStatus()){
+			curr++;
+		}
+		if(curr != actors.size()){	
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	public LinkedList<MainRole> getMainActors(){ return actors; }	
 
 	public LinkedList<MainRole> findMainActor(int playerLevel){

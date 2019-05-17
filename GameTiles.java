@@ -41,10 +41,8 @@ public class GameTiles{
 		for(int i = 0; i < tiles.size(); i++){
 			Location currTile = tiles.get(i);
 			Set film = currTile.getSet();
-			if(currTile.isPlayableSet()){
-				if(film.getShotCounter() != 0){
-					finishRound = false;
-				}
+			if(film.getShotCounter() != 0){
+				finishRound = false;
 			}
 		}
 		return finishRound;

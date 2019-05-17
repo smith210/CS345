@@ -11,7 +11,10 @@ public class Deadwood{
 		boolean isPlaying = true;
 		while(isPlaying){
 			currGame.iterateRound();
-
+			if(currGame.getRound() == 0){
+				Player winner = currGame.evaluateWinner();
+				isPlaying = false;
+			}
 		}
 	}
 }

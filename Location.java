@@ -28,14 +28,6 @@ public class Location{
 
 	public LinkedList<Location> getNeighbors(){ return neighbors; }
 
-	public boolean isPlayableSet(){
-		boolean workableSet = true;
-		if(name.equals("trailer") || name.equals("casting office")){
-			workableSet = false;
-		}
-		return workableSet;
-
-	}
 
 	
 

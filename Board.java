@@ -31,22 +31,50 @@ public class Board{
 		tiles.drawScenes();
 		System.out.println("BEGINNING OF ROUND " + display);
 		System.out.println(" ");
-		int i = 0;
+		int num = 0;
 		while(!hasFinishedRound()){
-			Player p = users.get(i);
+			Player p = users.get(num);
 			p.takeTurn();
-			i = i + 1;
-			if(i == users.size()){ 
-				i = 0; 
+			Set pSet = p.getLocation().getSet();
+			if(pSet.getShotCounter() == 0 && pSet.getScene().hasMainActors()){
+				LinkedList<Player> onScene = getPlayers(p.getLocation());
+				for(int i = 0; i < onScene.size(); i++){
+					Player actor = onScene.get(i);
+					String actorType = actor.getJob().getWorkType();
+					Wallet myWallet = actor.evalWalletContent();
+					switch(actorType){			
+						case "MAIN":
+							//myWallet.addCredits(2);
+							break;
+						case "EXTRA":
+							myWallet.addDollars(onScene.get(i).getJob().getWorkLevel());
+							break;
+						default:
+					}
+					actor.removeWork();
+				}						
+
 			}
+			num = num + 1;
+			if(num == users.size()){ 
+				num = 0; 
+			}	
 		}
 		System.out.println("END OF ROUND " + getRound());
-		if(getRound() == 0){
-			//Player winner = currGame.evaluateWinner()
-		}else{
-			nextRound();
-		}
 
+		nextRound();
+
+	}
+
+	public LinkedList<Player> getPlayers(Location loc){
+		LinkedList<Player> onLoc = new LinkedList<Player>();		
+		for(int i = 0; i < users.size(); i++){
+			Location l = users.get(i).getLocation();
+			if(l.getID() == loc.getID()){
+				onLoc.add(users.get(i));
+			}
+		}
+		return onLoc;
 	}
 
 	public boolean hasFinishedRound(){ return tiles.isBoardWrapped(); }

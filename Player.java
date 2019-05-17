@@ -9,6 +9,8 @@ public class Player{
 	private boolean activeActor;
 	private Work jobDescription;
 	private Roll dice; 
+	private CastingOffice co;
+	private userInput query;
 
 	Player(){
 		playerName = "";//haven't thought about default name yet
@@ -17,6 +19,8 @@ public class Player{
 		myWallet = new Wallet();
 		jobDescription = new Work();
 		dice = new Roll();
+		co = new CastingOffice();
+		query = new userInput();
 	}
 	public void setLocation(Location location){ currLocation = location; }
 
@@ -25,6 +29,13 @@ public class Player{
 	public int getLevel(){ return actorLevel; }
 
 	public Location getLocation(){ return currLocation; }
+
+	public Work getJob(){ return jobDescription; }
+
+	public void removeWork(){
+		activeActor = false;
+		jobDescription = new Work();
+	}
 
 	public void takeTurn(){
 		System.out.println(playerName+ " level: " + actorLevel);
@@ -36,7 +47,7 @@ public class Player{
 		boolean hasMoved = false;
 		while(!finishTurn){
 
-			String userInput = getUserInput("Enter your move: ");
+			String userInput = query.getUserInput("Enter your move: ");
 			switch(userInput){
 				case "MOVE":
 					if(!activeActor && !hasMoved){
@@ -46,7 +57,7 @@ public class Player{
 							System.out.println(ID + ": " + nextDoor.getLocationName());
 						}
 						String moveInput = "";
-						int desiredMove = getIntInput("Where do you want to move to?",
+						int desiredMove = query.getIntInput("Where do you want to move to?",
 														"move", 0, neighborhood.size());
 						if(desiredMove != -1){
 							setLocation(neighborhood.get(desiredMove));
@@ -59,12 +70,18 @@ public class Player{
 					}
 					break;
 				case "UPGRADE":
-
-					if(!activeActor && currLocation.getID() == 8){
-						System.out.println("in the right area to level up");
-						int levelDesired = getIntInput("What level do you want to level up to?", "upgrade", 1, 6);
+					if(actorLevel != 6){
+						if(!activeActor && currLocation.getID() == 8){
+							int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 6);
+							if(levelDesired != -1){
+								co.updateWallet(myWallet);							
+								myWallet = co.pay(levelDesired);
+							}
+						}else{
+							System.out.println("you cannot upgrade in the " + currLocation.getLocationName());
+						}
 					}else{
-						System.out.println("you cannot Upgrade in the " + currLocation.getLocationName());
+						System.out.println("you are upgraded to the maximimum");
 					}
 					break;
 				case "WORK":
@@ -93,29 +110,6 @@ public class Player{
 		}
 		System.out.println(" ");
 	}
-	
-	private int getIntInput(String prompt, String action, int min, int max){
-		int intInput = -1;
-		boolean validInput = false;
-		while(!validInput){
-			String userInput = getUserInput(prompt + " (if you don't want to " + action + ", type \"no\"): ");
-			try{
-				if(Integer.parseInt(userInput) >= min && Integer.parseInt(userInput) < max){
-					intInput = Integer.parseInt(userInput);
-					validInput = true;
-				}else{
-					System.out.println("The ID does not correspond with one of the listed IDs.");
-				}
-			}catch(Exception e){
-				if(userInput.equals("NO")){
-					validInput = true;
-				}else{
-					System.out.println("You must input the ID associated with your choice in order to " + action + ".");
-				}
-			}
-		}
-		return intInput;
-	}	
 
 	private void setRole(){
 		Set actingSpace = currLocation.getSet();
@@ -130,7 +124,7 @@ public class Player{
 				availableWork.get(jobNum).display();
 			}
 			boolean validInput = false;
-			int roleID = getIntInput("Which Role do You Want?", "work", 0, availableWork.size());
+			int roleID = query.getIntInput("Which Role do You Want?", "work", 0, availableWork.size());
 			if(roleID != -1){
 				jobDescription = availableWork.get(roleID);
 				jobDescription.bufWork();
@@ -150,58 +144,62 @@ public class Player{
 		if(activeActor){
 			boolean validInput = false;
 			while(!validInput){
-				String userInput = getUserInput("What do you want to work on: ");
+				String userInput = query.getUserInput("What do you want to work on: ");
 
 				switch(userInput){
 					case "REHEARSE":
-						validInput = true;
+						int priorAdd = dice.getAC();
 						dice.increaseAC();
+						int afterAdd = dice.getAC();
+						System.out.println("Increased acting counters from " + priorAdd + " to " + afterAdd);
+
+						validInput = true;
 						break;
 					case "ACT":
+						String actorType = jobDescription.getWorkType();
 						validInput = true;
 						dice.roll();
 						int actingEffort = dice.actRoll();
 						boolean isSucc = currLocation.getSet().isActSuccess(actingEffort);
-						/*if(isSucc){
+				
+						System.out.print("You rolled a " + dice.getRoll());
+						System.out.println(". With your rehearsals, that raised your roll to a " + actingEffort);
+						
+						if(isSucc){
+							System.out.println("You acted succesfully!" );
+							switch(actorType){
+								case "MAIN":
+									myWallet.addCredits(2);
+									break;
+								case "EXTRA":
+									myWallet.addDollars(1);
+									myWallet.addCredits(1);
+									break;
+								default:
+							}
+							
+							currLocation.getSet().decrementShotCounter();
+							int shotsLeft = currLocation.getSet().getShotCounter();	
+							System.out.print("There is " + shotsLeft + " shots left on ");
+							System.out.println(currLocation.getLocationName() +".");						
 
 						}else{
-
-						}*/
+							System.out.println("You suck at acting. " );
+							switch(actorType){
+								case "MAIN":
+									break;
+								case "EXTRA":
+									myWallet.addDollars(1);
+									break;
+								default:
+							}
+						}
 						break;
 					default:
 						System.out.print("INVALID WORK. ");	
 				}
 			}
-
-				//	--->send actingEffort to currLocation to retreive true or false
-				//		,will check if budget is less than or equal to actingEffort
-				//	if(successAct){
-				//		get paid (invoke myWallet)
-				//		currLocation.removeShotCounter();
-				//		if(currLocation.isSceneWrap()){
-				//			
-				//		}
-				//	}else{
-				//		if acting_type == extra --> pay
-				//		
 		}
-	}
-	
-	private String getUserInput(String query){
-			System.out.print(query);
-			Scanner scn = new Scanner(System.in);
-			String userInput = scn.nextLine();
-			userInput = userInput.toUpperCase();
-			return userInput;
-	}
-	
-	public void upgrade(int upgradeLevel){
-		//do check to see if valid level, and if near or in CastingOffice
-		//if check succeeds
-			//myWallet.addDollars(-amount) or myWallet.addCredits(-amount)
-			//actorLevel = upgradeLevel;
-		//if not located in the CastingOffice
-			//currLocation = CastingOffice;
 	}
 
 	public Wallet evalWalletContent(){ return myWallet; }

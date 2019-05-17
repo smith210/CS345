@@ -13,10 +13,11 @@ public class Set{
 
 	public void createExtras(LinkedList<ExtraRole> actors){ this.actors = actors; }
 	public void setScene(Scene film){ this.film = film; }
+	public Scene getScene(){ return film; }
 
 	public void setShotCounter(int shots){ shotCounter = shots; }
 
-	public void DecrementShotCounter(){
+	public void decrementShotCounter(){
 		if(shotCounter != 0){
 			shotCounter = shotCounter - 1;
 		}	
@@ -25,10 +26,6 @@ public class Set{
 	public String getSceneDesc(){ return film.getName() + " scene no. " + film.getSceneNum(); }
 
 	public int getShotCounter(){ return shotCounter; }	
-
-	private void scenePayout(){
-		// we'll get there :)
-	}
 
 	public LinkedList<Work> listAllWork(){
 		LinkedList<Work> actingJobs = new LinkedList<Work>();
