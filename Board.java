@@ -36,8 +36,8 @@ public class Board{
 			Player p = users.get(num);
 			p.takeTurn();
 			Set pSet = p.getLocation().getSet();
+			LinkedList<Player> onScene = getPlayers(p.getLocation());
 			if(pSet.getShotCounter() == 0 && pSet.getScene().hasMainActors()){
-				LinkedList<Player> onScene = getPlayers(p.getLocation());
 				for(int i = 0; i < onScene.size(); i++){
 					Player actor = onScene.get(i);
 					String actorType = actor.getJob().getWorkType();
@@ -51,10 +51,13 @@ public class Board{
 							break;
 						default:
 					}
-					actor.removeWork();
-				}						
-
+				}					
+	
 			}
+			for(int j = 0; j < onScene.size(); j++){
+				Player actor = onScene.get(i);
+				actor.removeWork();
+			}	
 			num = num + 1;
 			if(num == users.size()){ 
 				num = 0; 
