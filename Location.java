@@ -28,6 +28,14 @@ public class Location{
 
 	public LinkedList<Location> getNeighbors(){ return neighbors; }
 
+	public void displayContent(String userName){
+		System.out.println(userName + " on the " + name + ".");
+		if(workSpace.getShotCounter() != 0){
+			System.out.println("Currently it's shooting " + workSpace.getScene().sceneDesc());
+		}
+	
+	}
+
 
 	
 

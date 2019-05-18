@@ -7,6 +7,7 @@ public class Roll{
 	Roll(){
 		Random r = new Random();
 		diceRoll = r.nextInt(6) + 1;
+		actingCounters = 0;
 	}
 
 	public void roll(){
@@ -25,6 +26,18 @@ public class Roll{
 	public int getRoll(){
 		return diceRoll;
 	}
+
+	public boolean isMaxRehearsals(int budget){
+		if(budget <= (actingCounters + 1)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public void displayRehearsals(){
+		System.out.println("You have completed " + actingCounters + " rehearsals.");
+	}
 		
 	public int getAC(){
 		return actingCounters;
@@ -38,7 +51,7 @@ public class Roll{
 		return index;
 	}
 
-	public LinkedList<Integer> bonusPayout(int budget){
+	public LinkedList<Integer> getBonusRoll(int budget){
 		LinkedList<Integer> allRolls = new LinkedList<Integer>();		
 		for(int i = 0; i < budget; i++){	
 			roll();

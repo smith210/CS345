@@ -5,19 +5,27 @@ public class Board{
 	private GameTiles tiles;
 	private int round;
 	private int display;
+	private userInput query;
 	
 	Board(int playerNum){
 		users = new LinkedList<Player>();
 		tiles = new GameTiles();
 		createPlayers(playerNum);
 		display = 1;	
-		round = 4;
+		round = 3;
+		query = new userInput();
 
 		if(playerNum == 2){
-			round = 3;
+			round = 2;
 		}
 	}
 	
+	private void returnToTrailer(){
+		for(int i = 0; i < playerNum; i++){
+			users.get(i).setLocation(tiles.get(4));
+		}
+	}
+
 	private void createPlayers(int playerNum){
 		for(int i = 0; i < playerNum; i++){
 			Player temp = new Player();
@@ -27,28 +35,81 @@ public class Board{
 		}
 	}
 
-	public void iterateRound(){
+	private void displayOtherPlayers(int asker){
+		for(int i = 0; i < users.size(); i++){
+			if(i != asker){
+				users.get(i).playerLocation(users.get(i).getPlayerName() + " is");
+			}
+		}
+	}
+
+	public void getPlayerInput(Player p, int ID){
+
+		boolean finishTurn = false;
+		boolean hasWorked = false;
+		boolean hasMoved = false;
+		while(!finishTurn){
+
+			String userInput = query.getCommand("Enter your move: ");
+			switch(userInput){
+				case "MOVE":
+					hasMoved = p.move(hasMoved);
+					break;
+				case "UPGRADE":
+					p.upgrade();
+					break;
+				case "WORK":
+					hasWorked = p.initializeWork(hasWorked, hasMoved);
+					break;
+				case "END":
+					finishTurn = true;
+					break;
+				case "AMOUNT":
+					p.evalWalletContent().displayContent();
+					break;
+				case "WHO":
+					p.playerInformation();
+					break;
+				case "WHERE":
+					p.playerLocation("You are");
+					displayOtherPlayers(ID);
+					break;
+				case "RENAME":
+					String newName = query.getUserInput("Enter your new name: ");
+					p.setPlayerName(newName);
+					break;
+				default:
+					System.out.print("INVALID MOVE. ");		
+			}
+		}
+		System.out.println(" ");
+	}
+
+	public int iterateRound(int start){
 		tiles.drawScenes();
 		System.out.println("BEGINNING OF ROUND " + display);
 		System.out.println(" ");
-		int num = 0;
+		returnToTrailer();
+
+		int num = start;
 		while(!hasFinishedRound()){
 			Player p = users.get(num);
-			p.takeTurn();
+			getPlayerInput(p, num);
 			Set pSet = p.getLocation().getSet();
 			LinkedList<Player> onScene = getPlayers(p.getLocation());
 			if(pSet.getShotCounter() == 0){
 				if(pSet.getScene().hasMainActors()){
+					LinkedList<Integer> bonusRolls = p.grabDice().getBonusRoll(pSet.getScene().getBudget());
 					for(int i = 0; i < onScene.size(); i++){
 						Player actor = onScene.get(i);
 						String actorType = actor.getJob().getWorkType();
 						Wallet myWallet = actor.evalWalletContent();
 						switch(actorType){			
 							case "MAIN":
-								//myWallet.addDollars(2);
+								actor.bonusPayout(bonusRolls);
 								break;
 							case "EXTRA":
-								myWallet.addDollars(onScene.get(i).getJob().getWorkLevel());
+								myWallet.addDollars(onScene.get(i).getJob().getWorkLevel(), actor.getPlayerName());
 								break;
 							default:
 						}
@@ -69,6 +130,7 @@ public class Board{
 		System.out.println("END OF ROUND " + getRound());
 
 		nextRound();
+		return num;
 
 	}
 
@@ -76,7 +138,7 @@ public class Board{
 		LinkedList<Player> onLoc = new LinkedList<Player>();		
 		for(int i = 0; i < users.size(); i++){
 			Location l = users.get(i).getLocation();
-			if(l.getID() == loc.getID()){
+			if(l.getID() == loc.getID() && users.get(i).isWorking()){
 				onLoc.add(users.get(i));
 			}
 		}

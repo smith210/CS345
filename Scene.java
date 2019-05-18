@@ -20,6 +20,17 @@ public class Scene{
 
 	public int numMainActors(){ return actors.size(); }
 
+	public int mainActorID(Work person){
+		int ID = 0;		
+		while(ID != actors.size() && person.getJobTitle().equals(actors.get(ID).getJobTitle())){
+			ID++;
+		}
+		if(ID == actors.size()){
+			ID = -1;
+		}
+		return ID;
+	}
+
 	public int getActingHierarchy(MainRole actor){
 		int position = 0;
 		while(position != actors.size() && actors.get(position).getWorkLevel() != actor.getWorkLevel()){
@@ -49,6 +60,8 @@ public class Scene{
 		}
 	}
 
+	public String sceneDesc(){ return sceneName + ", Scene no. " + sceneNum; }
+
 	public LinkedList<MainRole> getMainActors(){ return actors; }	
 
 	public LinkedList<MainRole> findMainActor(int playerLevel){
@@ -67,8 +80,8 @@ public class Scene{
 	}
 
 	public void displayContent(){
-		System.out.println("Scene being filmed: " + sceneName + " scene no. " + sceneNum );
-		System.out.println("Budget of the film: $" + movieBudget );
+		System.out.println("Scene being filmed: " + sceneDesc());
+		System.out.println("Budget of the film: $" + movieBudget + " million");
 
 	}
 }

@@ -13,7 +13,7 @@ public class Player{
 	private userInput query;
 
 	Player(){
-		playerName = "";//haven't thought about default name yet
+		playerName = "";
 		actorLevel = 1;
 		currLocation = new Location();
 		myWallet = new Wallet();
@@ -26,6 +26,8 @@ public class Player{
 
 	public void setPlayerName(String name){ playerName = name; }
 
+	public void setActorLevel(int actorLevel){this.actorLevel = actorLevel;}
+
 	public String getPlayerName(){ return playerName; }
 	
 	public int getLevel(){ return actorLevel; }
@@ -34,89 +36,119 @@ public class Player{
 
 	public Work getJob(){ return jobDescription; }
 
+	public boolean isWorking(){ return activeActor; }
+
+	public Roll grabDice(){return dice;}
+
 	public void removeWork(){
-		System.out.println(playerName + " has ended working.");
+		System.out.println(playerName + " has finished working at " + currLocation.getLocationName() + ".");
 		activeActor = false;
 		jobDescription = new Work();
+		dice = new Roll();
 	}
 
-	public void takeTurn(){
-		System.out.println(playerName+ " level: " + actorLevel);
-		System.out.println(jobDescription.getWorkType() + " " + activeActor);
-		System.out.println("location: " + currLocation.getLocationName());
-			
-		boolean finishTurn = false;
-		boolean hasWorked = false;
-		boolean hasMoved = false;
-		while(!finishTurn){
-
-			String userInput = query.getUserInput("Enter your move: ");
-			switch(userInput){
-				case "MOVE":
-					if(!activeActor && !hasMoved){
-						LinkedList<Location> neighborhood = currLocation.getNeighbors();
-						for(int ID = 0; ID < neighborhood.size(); ID++){
-							Location nextDoor = neighborhood.get(ID);						
-							System.out.println(ID + ": " + nextDoor.getLocationName());
-						}
-						String moveInput = "";
-						int desiredMove = query.getIntInput("Where do you want to move to?",
-														"move", 0, neighborhood.size());
-						if(desiredMove != -1){
-							setLocation(neighborhood.get(desiredMove));
-							System.out.println("move successful! You are now in " + currLocation.getLocationName());
-							hasMoved = true;
-						}
-		
-					}else{
-						System.out.println("you are not allowed to move");
-					}
-					break;
-				case "UPGRADE":
-					if(actorLevel != 6){
-						if(!activeActor && currLocation.getID() == 8){
-							int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 6);
-							if(levelDesired != -1){
-								co.updateWallet(myWallet);							
-								myWallet = co.pay(levelDesired);
-							}
-						}else{
-							System.out.println("you cannot upgrade in the " + currLocation.getLocationName());
-						}
-					}else{
-						System.out.println("you are upgraded to the maximimum");
-					}
-					break;
-				case "WORK":
-					if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
-						Set actingSpace = currLocation.getSet();
-						actingSpace.getSceneDesc();
-						if(!hasMoved){ 
-							work();
-						}else{ 
-							setRole(); 
-						}
-						
-						if(activeActor){ hasWorked = true; }
-					}else{
-						if(hasWorked){
-							System.out.println("you already worked");
-						}else{
-							System.out.println("you are not allowed to work here");
-						}						
-					}
-					break;
-				case "END":
-					finishTurn = true;
-					break;
-				case "AMOUNT":
-					myWallet.displayContent();
-					break;
-				default:
-					System.out.print("INVALID MOVE. ");		
-			}
+	public void playerInformation(){
+		System.out.println("You are " + playerName + ", a Level " + actorLevel + " actor.");
+		System.out.println("You are at the " + currLocation.getLocationName() + ".");
+		if(!activeActor){
+			System.out.println("You are currently not working.");
+		}else{
+			System.out.println("You are currently working on " + jobDescription.getJobTitle());
 		}
-		System.out.println(" ");
+	}
+
+	public void bonusPayout(LinkedList<Integer> bonusDice){
+		int mainID = currLocation.getSet().getScene().mainActorID(jobDescription);
+		int numMain = currLocation.getSet().getScene().numMainActors();
+
+		int curr = 0;
+		int payment = 0;
+		while(curr != bonusDice.size()){
+			if(payment == mainID){
+				myWallet.addDollars(bonusDice.get(curr), playerName);
+			}			
+
+			if(payment != numMain){
+				payment++;
+			}else{
+				payment = 0;
+			}
+			curr++;
+		}
+	}
+
+	public void playerLocation(String userView){
+		System.out.print(userView + " on the " + currLocation.getLocationName());
+		if(activeActor){
+			System.out.print(", working");
+		}
+		System.out.println(".");
+	}
+
+	public boolean move(boolean hasMoved){
+		if(!activeActor && !hasMoved){
+			LinkedList<Location> neighborhood = currLocation.getNeighbors();
+			for(int ID = 0; ID < neighborhood.size(); ID++){
+				Location nextDoor = neighborhood.get(ID);						
+				System.out.println(ID + ": " + nextDoor.getLocationName());
+			}
+			String moveInput = "";
+			int desiredMove = query.getIntInput("Where do you want to move to?",
+											"move", 0, neighborhood.size());
+			if(desiredMove != -1){
+				System.out.print("Move successful! You have moved from the " + currLocation.getLocationName());
+				setLocation(neighborhood.get(desiredMove));
+				System.out.println(" to the " + currLocation.getLocationName() + ".");
+				hasMoved = true;
+			}
+
+		}else{
+			System.out.println("You are not allowed to move");
+		}
+		return hasMoved;
+	}
+
+	public void upgrade(){
+		if(actorLevel != 6){
+			if(!activeActor && currLocation.getID() == 8){
+				co.updateWallet(myWallet);
+				co.displayPrice();
+				myWallet.displayContent();
+				int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 6);
+				if(levelDesired != -1){						
+					boolean hasPayment = co.pay(levelDesired);
+
+					if(hasPayment){
+						setActorLevel(levelDesired);
+					}
+				}
+			}else{
+				System.out.println("You cannot upgrade in the " + currLocation.getLocationName() + ".");
+			}
+		}else{
+			System.out.println("You are upgraded to the maximimum.");
+		}
+	}
+
+	public boolean initializeWork(boolean hasWorked, boolean hasMoved){
+		if(currLocation.getSet().getShotCounter() != 0 && !hasWorked){
+			Set actingSpace = currLocation.getSet();
+			actingSpace.getSceneDesc();
+			if(!hasMoved){ 
+				work();
+			}else{ 
+				setRole(); 
+			}
+			
+			if(activeActor){ hasWorked = true; }
+		}else{
+			if(hasWorked){
+				System.out.println("You already worked this turn.");
+			}else{
+				System.out.println("You cannot work at the " + currLocation.getLocationName() + ".");
+			}						
+		}
+		return hasWorked;
 	}
 
 	private void setRole(){
@@ -150,17 +182,22 @@ public class Player{
 		}
 		if(activeActor){
 			boolean validInput = false;
+			dice.displayRehearsals();
 			while(!validInput){
-				String userInput = query.getUserInput("What do you want to work on: ");
+				String userInput = query.getCommand("What do you want to work on: ");
 
 				switch(userInput){
 					case "REHEARSE":
-						int priorAdd = dice.getAC();
-						dice.increaseAC();
-						int afterAdd = dice.getAC();
-						System.out.println("Increased acting counters from " + priorAdd + " to " + afterAdd);
+						if(!dice.isMaxRehearsals(currLocation.getSet().getScene().getBudget())){
+							int priorAdd = dice.getAC();
+							dice.increaseAC();
+							int afterAdd = dice.getAC();
+							System.out.println("Increased acting counters from " + priorAdd + " to " + afterAdd);
 
-						validInput = true;
+							validInput = true;
+						}else{
+							System.out.println("You rehearsed enough! Just act already!");
+						}
 						break;
 					case "ACT":
 						String actorType = jobDescription.getWorkType();
@@ -176,11 +213,11 @@ public class Player{
 							System.out.println("You acted succesfully!" );
 							switch(actorType){
 								case "MAIN":
-									myWallet.addCredits(2);
+									myWallet.addCredits(2, "You");
 									break;
 								case "EXTRA":
-									myWallet.addDollars(1);
-									myWallet.addCredits(1);
+									myWallet.addDollars(1, "You");
+									myWallet.addCredits(1, "You");
 									break;
 								default:
 							}
@@ -194,9 +231,10 @@ public class Player{
 							System.out.println("You suck at acting. " );
 							switch(actorType){
 								case "MAIN":
+									System.out.println("You do not recieve any currency.");
 									break;
 								case "EXTRA":
-									myWallet.addDollars(1);
+									myWallet.addDollars(1, "You");
 									break;
 								default:
 							}

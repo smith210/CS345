@@ -35,9 +35,8 @@ public class Work{
 	public String getWorkType(){ return workType; }
 	
 	public void display(){
-		System.out.print(workType);
-		System.out.print(" " + jobTitle);
-		System.out.println("  " + workLevel);
+
+		System.out.println(workType + " ACTOR: " + jobTitle + ", Actor Level " + workLevel);
 	}
 	//public abstract int payout(boolean isActSuccess);
 

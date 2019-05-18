@@ -9,10 +9,12 @@ public class Deadwood{
 		//will contain game logic;
 		Board currGame = new Board(playerNum);
 		boolean isPlaying = true;
+		int starter = 0;
 		while(isPlaying){
-			currGame.iterateRound();
+			starter = currGame.iterateRound(starter);
 			if(currGame.getRound() == 0){
 				Player winner = currGame.evaluateWinner();
+				System.out.println(winner.getPlayerName() + " Wins!");
 				isPlaying = false;
 			}
 		}

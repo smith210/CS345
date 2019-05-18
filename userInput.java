@@ -2,11 +2,17 @@ import java.util.*;
 
 public class userInput{
 
+	private String userInput;
+
+	userInput(){
+		userInput = "";
+	}
+
 	public int getIntInput(String prompt, String action, int min, int max){
 		int intInput = -1;
 		boolean validInput = false;
 		while(!validInput){
-			String userInput = getUserInput(prompt + " (if you don't want to " + action + ", type \"no\"): ");
+			userInput = getCommand(prompt + " (if you don't want to " + action + ", type \"no\"): ");
 			try{
 				if(Integer.parseInt(userInput) >= min && Integer.parseInt(userInput) < max){
 					intInput = Integer.parseInt(userInput);
@@ -28,9 +34,13 @@ public class userInput{
 	public String getUserInput(String query){
 		System.out.print(query);
 		Scanner scn = new Scanner(System.in);
-		String userInput = scn.nextLine();
-		userInput = userInput.toUpperCase();
+		userInput = scn.nextLine();
 		return userInput;
+	}
+
+	public String getCommand(String query){
+		userInput = getUserInput(query);
+		return userInput.toUpperCase();
 	}
 
 }

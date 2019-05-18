@@ -17,6 +17,22 @@ public class CastingOffice{
 		query = new userInput();
 	}
 
+	private void display(int[] detail, String name){
+		System.out.println(name + " " + detail[0] + " Dollars OR " + detail[1] + " Credits"); 
+	}
+
+	public void displayPrice(){
+		System.out.println();
+		System.out.println("Welcome to the Casting Office!");
+		System.out.println("Here are the Prices:");
+		display(levelTwo, "Level 2:");
+		display(levelThree, "Level 3:");
+		display(levelFour, "Level 4:");
+		display(levelFive, "Level 5:");
+		display(levelSix, "Level 6:");
+		System.out.println();
+	}
+
 	public void updateWallet(Wallet purse){ this.purse = purse; }
 
 	private int canPay(int pocketChange, int level, int type){
@@ -56,25 +72,29 @@ public class CastingOffice{
 
 	private void payDollars(int payment){
 		System.out.println("Paying in dollars...");
-		purse.addDollars(payment * -1);
+		purse.addDollars(payment * -1, "You");
 	}
 
 	private void payCredits(int payment){
 		System.out.println("Paying in credits...");
-		purse.addCredits(payment * -1);
+		purse.addCredits(payment * -1, "You");
 	}
 
 	
 
-	public Wallet pay(int level){		
+	public boolean pay(int level){	
+
+	
 		int dollars = purse.getDollars();
 		int credits = purse.getCredits();
 	
 		int payDollars = canPay(dollars, level, 0);
 		int payCredits = canPay(credits, level, 1);
 
+		boolean hasCash = true;
+
 		if(payDollars != -1 && payCredits != -1){
-			String payType = query.getUserInput("Do you want to pay in Dollars or Credits: ");
+			String payType = query.getCommand("Do you want to pay in Dollars or Credits: ");
 			boolean validInput = false;
 			while(!validInput){
 				switch(payType){
@@ -96,8 +116,9 @@ public class CastingOffice{
 			payCredits(payCredits);
 		}else{
 			System.out.println("You don't have the appropriate currency to level up.");
+			hasCash = false;
 		}
-		return purse;
+		return hasCash;
 
 	}
 

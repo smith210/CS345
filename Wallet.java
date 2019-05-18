@@ -15,21 +15,22 @@ public class Wallet{
 		return credits;
 	}
 
-	public void addDollars(int paycheck){
-		displayStatus(paycheck, "Dollar");
+	public void addDollars(int paycheck, String user){
+		displayStatus(paycheck, "Dollar", user);
 		dollars = dollars + paycheck;
 	}
 
-	public void addCredits(int paycheck){
-		displayStatus(paycheck, "Credit");
+	public void addCredits(int paycheck, String user){
+		displayStatus(paycheck, "Credit", user);
 		credits = credits + paycheck;
 	}
 
-	private void displayStatus(int paycheck, String type){
+	private void displayStatus(int paycheck, String type, String userName){
 		if(paycheck >= 0){
-			System.out.print("Recieved payment of ");
+			System.out.print(userName + " recieved payment of ");
 		}else{
-			System.out.print("Paying ");
+			paycheck = paycheck * -1;
+			System.out.print(userName + " paid ");
 		}
 		System.out.println(paycheck + " " + type);
 	}
