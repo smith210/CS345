@@ -5,7 +5,4 @@ public class MainRole extends Work {
 		super.setWorkType(ACTOR_TYPE);
 	}
 
-	public int payout(boolean isActSuccess){
-		return 0;
-	}
 }
