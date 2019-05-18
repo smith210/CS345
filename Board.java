@@ -15,9 +15,6 @@ public class Board{
 		round = 3;
 		query = new userInput();
 
-		if(playerNum == 2){
-			round = 2;
-		}
 	}
 	
 	private void returnToTrailer(){
