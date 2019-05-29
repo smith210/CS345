@@ -114,7 +114,7 @@ public class Player{
 				co.updateWallet(myWallet);
 				co.displayPrice();
 				myWallet.displayContent();
-				int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 6);
+				int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 7);
 				if(levelDesired != -1){						
 					boolean hasPayment = co.pay(levelDesired);
 
