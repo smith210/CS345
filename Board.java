@@ -18,7 +18,7 @@ public class Board{
 	}
 	
 	private void returnToTrailer(){
-		for(int i = 0; i < playerNum; i++){
+		for(int i = 0; i < users.size(); i++){
 			users.get(i).setLocation(tiles.get(4));
 		}
 	}
