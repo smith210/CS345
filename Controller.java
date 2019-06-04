@@ -36,8 +36,10 @@ public class Controller{
 	public LinkedList<String> getNeighbors(){ return neighborLocations; }
 	public void clearNeighbors(){ neighborLocations = new LinkedList<String>(); }
 
-	public void redisplayImage(Player p){ design.passPlayerDetails(p);
-											design.repaint(); }
+	public void redisplayImage(Player p){ 
+			design.passPlayerDetails(p);
+			design.repaint(); 
+	}
 
 	public void fixView(String command){
 		switch(command){
