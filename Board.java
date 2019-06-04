@@ -1,22 +1,40 @@
 import java.util.*;
 
 public class Board{
+	private Controller cont;
+	private SwingPaint GUI;
 	private LinkedList<Player> users;
 	private GameTiles tiles;
 	private int round;
 	private int display;
 	private userInput query;
 	
-	Board(int playerNum){
+	public Board(){
+		GUI = new SwingPaint();
+		GUI.createAndShowGUI();
+		users = new LinkedList<Player>();
+		tiles = new GameTiles();
+		display = 1;	
+		round = 3;
+		query = new userInput();
+		cont = new Controller(query, GUI.getPanel(), GUI.getArt());
+	}
+	
+	public Board(int playerNum){
+		GUI = new SwingPaint();
+		GUI.createAndShowGUI();
 		users = new LinkedList<Player>();
 		tiles = new GameTiles();
 		createPlayers(playerNum);
 		display = 1;	
 		round = 3;
 		query = new userInput();
+		cont = new Controller(query, GUI.getPanel(), GUI.getArt());
 
 	}
 	
+	public userInput getQueries(){ return query; }
+
 	private void returnToTrailer(){
 		for(int i = 0; i < users.size(); i++){
 			users.get(i).setLocation(tiles.get(4));
@@ -26,6 +44,7 @@ public class Board{
 	private void createPlayers(int playerNum){
 		for(int i = 0; i < playerNum; i++){
 			Player temp = new Player();
+			temp.setQuery(query);
 			temp.setPlayerName("Player " + (i+1));
 			temp.setLocation(tiles.get(4));
 			users.add(temp);
@@ -40,17 +59,39 @@ public class Board{
 		}
 	}
 
+	private boolean move(Player p, boolean hasMoved){
+		LinkedList<String> hotSpots = p.neighborNames();
+		query.addNeighborNames(hotSpots);
+		cont.fixView("MOVE");
+		while(query.getIntInput() == 0){
+			cont.getCommand();	
+		}
+
+		if(query.getIntInput() != -1){
+			p.setLocation(tiles.get(query.getIntInput()));
+			hasMoved = true;
+			cont.disableMove();	
+			//cont.redisplayLoc(p.getLocation());
+		}
+		cont.wrapup();
+		return hasMoved;
+	}
+
 	public void getPlayerInput(Player p, int ID){
 
 		boolean finishTurn = false;
 		boolean hasWorked = false;
 		boolean hasMoved = false;
 		while(!finishTurn){
-
+			cont.redisplayImage(p);
 			String userInput = query.getCommand("Enter your move: ");
+			//String userInput = query.getUserInput();
+
 			switch(userInput){
 				case "MOVE":
-					hasMoved = p.move(hasMoved);
+					if(!hasMoved){
+						move(p, hasMoved);
+					}
 					break;
 				case "UPGRADE":
 					p.upgrade();
@@ -76,8 +117,10 @@ public class Board{
 					p.setPlayerName(newName);
 					break;
 				default:
-					System.out.print("INVALID MOVE. ");		
+					//System.out.print("INVALID MOVE. ");	
 			}
+			cont.getCommand();
+
 		}
 		System.out.println(" ");
 	}

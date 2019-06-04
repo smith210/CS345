@@ -12,7 +12,7 @@ public class Player{
 	private CastingOffice co;
 	private userInput query;
 
-	Player(){
+	public Player(){
 		playerName = "";
 		actorLevel = 1;
 		currLocation = new Location();
@@ -22,6 +22,10 @@ public class Player{
 		co = new CastingOffice();
 		query = new userInput();
 	}
+
+	public void setQuery(userInput query){ this.query = query;
+											System.out.println("SAME QUERY"); }
+
 	public void setLocation(Location location){ currLocation = location; }
 
 	public void setPlayerName(String name){ playerName = name; }
@@ -85,13 +89,28 @@ public class Player{
 		System.out.println(".");
 	}
 
-	public boolean move(boolean hasMoved){
+
+	public LinkedList<String> neighborNames(){
+		LinkedList<Location> neighborhood = currLocation.getNeighbors();
+		LinkedList<String> neighbornames = new LinkedList<String>();
+		for(int ID = 0; ID < neighborhood.size(); ID++){
+			Location nextDoor = neighborhood.get(ID);						
+			neighbornames.add(nextDoor.getLocationName());
+		}
+		return neighbornames;
+	}
+
+	/*public boolean move(boolean hasMoved){
 		if(!activeActor && !hasMoved){
 			LinkedList<Location> neighborhood = currLocation.getNeighbors();
+			LinkedList<String> neighbornames = new LinkedList<String>();
 			for(int ID = 0; ID < neighborhood.size(); ID++){
 				Location nextDoor = neighborhood.get(ID);						
 				System.out.println(ID + ": " + nextDoor.getLocationName());
+				neighbornames.add(nextDoor.getLocationName());
 			}
+			query.addNeighborNames(neighbornames);
+
 			String moveInput = "";
 			int desiredMove = query.getIntInput("Where do you want to move to?",
 											"move", 0, neighborhood.size());
@@ -106,7 +125,7 @@ public class Player{
 			System.out.println("You are not allowed to move");
 		}
 		return hasMoved;
-	}
+	}*/
 
 	public void upgrade(){
 		if(actorLevel != 6){
@@ -114,7 +133,7 @@ public class Player{
 				co.updateWallet(myWallet);
 				co.displayPrice();
 				myWallet.displayContent();
-				int levelDesired = query.getIntInput("What level do you want to level up to?", "upgrade", actorLevel, 7);
+				int levelDesired = query.getIntInput();
 				if(levelDesired != -1){						
 					boolean hasPayment = co.pay(levelDesired);
 
@@ -163,7 +182,7 @@ public class Player{
 				availableWork.get(jobNum).display();
 			}
 			boolean validInput = false;
-			int roleID = query.getIntInput("Which Role do You Want?", "work", 0, availableWork.size());
+			int roleID = query.getIntInput();
 			if(roleID != -1){
 				jobDescription = availableWork.get(roleID);
 				jobDescription.bufWork();

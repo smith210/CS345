@@ -7,6 +7,7 @@ public class Work{
 	private String workType;
 
 	Work(){
+		jobTitle = "Unemployed";
 		workLevel = 1;
 		isWorking = false;
 		workType = "none";
