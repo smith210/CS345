@@ -8,6 +8,7 @@ public class Player{
 
 	private String playerName;
 	private int actorLevel;
+	private boolean isTurn;
 	private Location currLocation;
 	private Wallet myWallet;
 	private boolean activeActor;
@@ -25,11 +26,15 @@ public class Player{
 		jobDescription = new Work();
 		dice = new Roll();
 		co = new CastingOffice();
+		isTurn = false;
 		//query = new userInput();
 		surroundings = new Colors();
 	}
 
 	//public void setQuery(userInput query){ this.query = query;}
+
+	public void allowTurn(boolean isTurn){ this.isTurn = isTurn; }
+	public boolean inTurn(){ return isTurn; }
 
 	public void setColors(Colors surroundings){ this.surroundings = surroundings; }
 

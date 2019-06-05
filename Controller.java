@@ -8,6 +8,7 @@ public class Controller{
 	private LinkedList<Work> jobsinArea;
 	//private MyPanelTwo view;
 	//private MyPanel design;
+	//private Board board;
 	private Window view;
 
 

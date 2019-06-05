@@ -2,15 +2,18 @@ import java.util.*;
 
 public class Deadwood{
 	private Board currGame;
-
+	//private Controller cont;
+	//	private SwingPaint GUI;
 	private int playerNum;
 
 	Deadwood(){
 		//currGame = new Board();
-
+		//GUI = new SwingPaint();
+		//GUI.createAndShowGUI();
+		//cont = new Controller(GUI, currGame);
 		//cont.setView(GUI.getPanel());
 		//cont.setModel(currGame.getQueries());
-		playerNum = 2;// new Integer();
+		playerNum = 3;// new Integer();
 	}
 
 	public void run(){//int playerNum) throws invalidPlayerException{

@@ -205,7 +205,7 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 			if(!command.equals("NO") && !command.equals("END")){
 				setBaseCommand(command);
 			}
-			if(command.equals("END")){//refresh for next player
+			if(command.equals("END") || command.equals("UPGRADE")){//refresh for next player
 				command = new String();
 				Jobs.clear();
 				JOBS.clearButtons();

@@ -49,17 +49,49 @@ public class Painting{
 		}
 	}
 
-	public void paintLocDetails(Graphics g, String desc){
-		int xCoord = 430;
+	private void printLine(Graphics g, String printable, int xCoord, int yCoord){
+		g.drawString(printable, xCoord, yCoord);
+	}
+
+	private int yCoord(int spacing, int numLine){
 		int yCoord = 575;
+		return (yCoord + (spacing * numLine));
+	}
+
+	public void paintLocDetails(Graphics g, Player p){
+		int xCoordLoc = 430;
+		int xCoordList = xCoordLoc + 25;
+ 		int spacing = 25;
+		int spacingList = 22;
+		int newLines = 0;
+
 		g.setFont(new Font("TimesRoman", Font.BOLD, 14));
 		//g.drawImage(players.get(index), 30, 555, null);
 
-		g.setColor(Color.WHITE);
-		g.drawString("Player 1 is thinking in the " + desc +"...", xCoord, yCoord);
+		Location loc = p.getLocation();
+		g.setColor(Color.BLACK);
+		
+		printLine(g, p.getPlayerName() + " resides in the " + loc.getLocationName() + ".", xCoordLoc, yCoord(spacing, newLines));
+		if(loc.getSet().getShotCounter() != 0){
 		/*g.drawString("Player 1 has traveled to Main Street!", xCoord, yCoord+30);
 		g.drawString("Player 1 decided to act on Main Street!", xCoord, yCoord+60);
 		g.drawString("Player 1 decided to rest for the moment...", xCoord, yCoord+90);*/
+			printLine(g, "Number of Counters: " + loc.getSet().getShotCounter(), xCoordLoc, yCoord(spacing, 1));
+			printLine(g, "Scene of the Day: ", xCoordLoc, yCoord(spacing, 2));
+			printLine(g, loc.getSet().getScene().sceneDesc(), xCoordList, yCoord(spacingList, 3));
+			printLine(g, "Scene Budget: $" + loc.getSet().getScene().getBudget() + " million", xCoordLoc, yCoord(spacing, 4));
+			
+		}else{
+			if(loc.getID() == 4){
+				printLine(g, "Welcome to Deadwood, young actor!", xCoordLoc, yCoord(spacing, 1));
+				printLine(g,"Travel around to get experience and monies!", xCoordLoc, yCoord(spacingList, 2));
+			}else if(loc.getID() == 8){
+				printLine(g,"If you have enough monies,", xCoordLoc, yCoord(spacing, 1));
+				printLine(g,"you can upgrade your Acting Status" , xCoordLoc, yCoord(spacingList, 2));
+			}else{
+				printLine(g,"Seems like the scene at the " + loc.getLocationName() + " has wrapped for today.", xCoordLoc, yCoord(spacing, 1));
+			}
+		}
 
 
 	}

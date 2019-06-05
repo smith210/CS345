@@ -82,11 +82,49 @@ public class Board{
 
 	}
 
+	private void act(Player p, boolean succAct){
+		if(succAct){
+			System.out.println("You acted succesfully!" );
+			switch(p.getJob().getWorkType()){
+				case "MAIN":
+					p.evalWalletContent().addCredits(2, "You");
+					break;
+				case "EXTRA":
+					p.evalWalletContent().addDollars(1, "You");
+					p.evalWalletContent().addCredits(1, "You");
+					break;
+				default:
+			}
+			
+			p.getLocation().getSet().decrementShotCounter();
+			int shotsLeft = p.getLocation().getSet().getShotCounter();	
+			System.out.print("There is " + shotsLeft + " shots left on ");
+			System.out.println(p.getLocation().getLocationName() +".");						
+
+		}else{
+			System.out.println("You suck at acting. " );
+			switch(p.getJob().getWorkType()){
+				case "MAIN":
+					System.out.println("You do not recieve any currency.");
+					break;
+				case "EXTRA":
+					p.evalWalletContent().addDollars(1, "You");
+					break;
+				default:
+			}
+		}
+	}
+
 	private void work(Player p){
 		//cont.fixView("WORK");	
 		if(!p.isWorking()){
 			role(p);
 		}
+		if(playerMoved){
+			System.out.println("finished moving");
+			cont.finishedAction("Work");
+		}	
+	
 		if(p.isWorking() && !playerMoved){
 			//set buttons for act and rehearsal
 			cont.fixView("WORK");
@@ -94,13 +132,21 @@ public class Board{
 				cont.getCommand();	
 			}
 			if(query.getIntInput() != -1){
+				switch(query.getUserInput()){
+					case "REHEARSE":
+						p.grabDice().increaseAC();
+						
+						break;
+					case "ACT":
+						p.grabDice().roll();
+						int actingEffort = p.grabDice().actRoll();
+						boolean isSucc = p.getLocation().getSet().isActSuccess(actingEffort);
+						break;
+					default:
+
+				}
 				cont.finishedAction("Work");				
 			}			
-		}
-	
-		if(playerMoved){
-			System.out.println("finished moving");
-			cont.finishedAction("Work");
 		}
 		cont.wrapup();
 	}
@@ -187,6 +233,7 @@ public class Board{
 		int num = start;
 		while(!hasFinishedRound()){
 			Player p = users.get(num);
+			p.allowTurn(true);
 			cont.redisplayImage();
 			getPlayerInput(p, num);
 			Set pSet = p.getLocation().getSet();
@@ -217,6 +264,7 @@ public class Board{
 			}
 	
 			num = num + 1;
+			p.allowTurn(false);
 			if(num == users.size()){ 
 				num = 0; 
 			}	

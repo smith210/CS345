@@ -70,7 +70,7 @@ public class MyPanel extends JPanel{
 		easel.paintSquare(splash, g);
 		easel.paintBackground(g);
 		easel.paintPlayer(g, perspective);
-		easel.paintLocDetails(g, perspective.getLocation().getLocationName());
+		easel.paintLocDetails(g, perspective);
 		//easel.paintOptionsBox(g);
     }  
 }
