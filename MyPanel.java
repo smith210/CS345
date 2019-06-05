@@ -24,10 +24,13 @@ public class MyPanel extends JPanel{
         });*/
     }
 
+
 	public void passPlayerDetails(Player perspective){
 		this.perspective = perspective;
 		repaint();
 	}
+
+	//public void removePlayer(){ perspective = new Player(); }
 
 
    /* private void moveSquare(int x, int y) {
@@ -62,9 +65,11 @@ public class MyPanel extends JPanel{
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g); 
-		easel.paintSquare(g);
+		Colors splash = perspective.getSurroundings();
+		easel.setBackground(perspective.getLocation().getID());
+		easel.paintSquare(splash, g);
 		easel.paintBackground(g);
-		easel.paintPlayer(1, g, perspective);
+		easel.paintPlayer(g, perspective);
 		easel.paintLocDetails(g, perspective.getLocation().getLocationName());
 		//easel.paintOptionsBox(g);
     }  

@@ -41,6 +41,7 @@ public class WorkButtons implements ActionListener{
 
 		REHEARSE.setCommand("REHEARSE");
 		ACT.setCommand("ACT");
+		FINISH.setCommand("NO");
 	}
 
 	public void disableRehearse(){ REHEARSE.setStatus(false); }
@@ -54,7 +55,7 @@ public class WorkButtons implements ActionListener{
 	private void hide(){
 		REHEARSE.setVisibility(false);
 		ACT.setVisibility(false);
-		FINISH.setVisibility(true);
+		FINISH.setVisibility(false);
 	}
 
     public void actionPerformed(ActionEvent e) {

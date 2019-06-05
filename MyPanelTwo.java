@@ -10,7 +10,7 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 	private CastButtons CAST;
 	private MoveButtons MOVE;
 
-	private Player p;	
+	//private Player p;	
 	private boolean selected;
 	private String baseCommand;
 	private String command;
@@ -23,68 +23,8 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 	protected LinkedList<JButton> Move;
 	protected JButton escape;
 
-	public String getCommand(){ return command; }
-	public boolean hasSelected(){ return selected; }
-	public void retrieved(){ selected = false; }
-
-	public void retrieveNeighbors(LinkedList<String> neighbors){ this.neighbors = neighbors;}
-
-	private void displayAll(LinkedList<JButton> buttons, boolean v){
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).setVisible(v);
-			//System.out.println(buttons.get(i).getText());
-		}
-	}
-
-	public void disableHome(String name){
-		int curr = 0;		
-		while(curr != Home.size() && !name.equals(Home.get(curr).getText())){
-			curr++;
-		}
-		if(curr != Home.size()){
-			Home.get(curr).setEnabled(false);
-		}
-	}
-
-	private void display(JButton j, boolean v){
-		j.setVisible(v);
-	}
-
-	private void searchMove(String name, boolean view){
-		int curr = 0;		
-		while(curr != Move.size() && !name.equals(Move.get(curr).getText())){
-			curr++;
-		}
-		if(curr == Move.size()){
-			return;
-		}else{
-			System.out.println(name + " found");
-			display(Move.get(curr), view);
-		}
-	}
-
-	private void addButtons(LinkedList<JButton> buttons){
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).addActionListener(this);
-			add(buttons.get(i));
-
-		}
-	}
-
-	private void createEscape(){
-		ButtonCreator escapeCreate = new ButtonCreator("Go Back");
-		escapeCreate.setCommand("NO");
-		escapeCreate.setVisibility(false);
-		escapeCreate.changeSize(100,50);
-		escape = escapeCreate.getJButton();		
-		escape.addActionListener(this);
-		add(escape);
-
-	}
-
 	public MyPanelTwo() {
 
-		//p = new Player();
 		baseCommand = new String();
 		command = new String();
 		selected = false;
@@ -101,8 +41,7 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		addButtons(Work);
 
 		JOBS = new RoleButtons();
-		//Jobs = JOBS.getButtons();
-		//addButtons(Jobs);
+		Jobs = new LinkedList<JButton>();
 
 		CAST = new CastButtons();
 		//Cast = CAST.getButtons();
@@ -115,6 +54,86 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		createEscape();
 		
 	}
+
+	public String getCommand(){ return command; }
+	public boolean hasSelected(){ return selected; }
+	public void resetCommand(){ command = new String(); }
+	public void retrieved(){ selected = false; }
+	public void setRoleButtons(LinkedList<Work> jobs, int level){//create the role buttons
+		JOBS.setLevel(level);		
+		JOBS.addButtons(jobs);
+		Jobs = JOBS.getButtons();
+		addButtons(Jobs);
+	}
+	public boolean rolesEmpty(){
+		if(Jobs.size() == 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public void retrieveNeighbors(LinkedList<String> neighbors){ this.neighbors = neighbors;}
+
+	private void setBaseCommand(String baseCommand){this.baseCommand = baseCommand; }
+
+	private void displayAll(LinkedList<JButton> buttons, boolean v){//display all buttons
+		for(int i = 0; i < buttons.size(); i++){
+			buttons.get(i).setVisible(v);
+			//System.out.println(buttons.get(i).getText());
+		}
+	}
+
+	private void toggleFinishWork(boolean view){
+		JButton finish = Work.get(2);
+		finish.setVisible(view);
+	}
+
+	public void toggleHomeButton(String name, boolean view){//toggle desired home button
+		int curr = 0;		
+		while(curr != Home.size() && !name.equals(Home.get(curr).getText())){
+			curr++;
+		}
+		if(curr != Home.size()){
+			Home.get(curr).setEnabled(view);
+		}
+	}
+
+	private void display(JButton j, boolean v){
+		j.setVisible(v);
+	}
+
+	private void searchMove(String name, boolean view){//search for location, set visibility
+		int curr = 0;		
+		while(curr != Move.size() && !name.equals(Move.get(curr).getText())){
+			curr++;
+		}
+		if(curr == Move.size()){
+			return;
+		}else{
+			System.out.println(name + " found");
+			display(Move.get(curr), view);
+		}
+	}
+
+	private void addButtons(LinkedList<JButton> buttons){//add listener
+		for(int i = 0; i < buttons.size(); i++){
+			buttons.get(i).addActionListener(this);
+			add(buttons.get(i));
+		}
+	}
+
+	private void createEscape(){//go back button
+		ButtonCreator escapeCreate = new ButtonCreator("Go Back");
+		escapeCreate.setCommand("NO");
+		escapeCreate.setVisibility(false);
+		escapeCreate.changeSize(100,50);
+		escape = escapeCreate.getJButton();		
+		escape.addActionListener(this);
+		add(escape);
+
+	}
+
     public Dimension getPreferredSize() {
         return new Dimension(300,800);
     }
@@ -123,16 +142,30 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		//redSquare.paintSquare(g);
     }  
 
-	public void movePanel(){
+	public void differentPanel(){//make home buttons invisible
 		displayAll(Home, false);
-		
 		display(escape, true);
+	}
+
+	public void movePanel(){//set neighbor buttons visible
+		differentPanel();
 		for(int i = 0; i < neighbors.size(); i++){
 			searchMove(neighbors.get(i), true);
 		}
 	}
 
-	private void closeDisplay(){
+	public void workPanel(){//set work buttons visible
+		differentPanel();
+		displayAll(Work, true);
+		toggleFinishWork(false);
+	}
+
+	public void rolePanel(){//set role buttons visible
+		differentPanel();
+		displayAll(Jobs, true);
+	}
+
+	private void closeDisplay(){//make displayed buttons invisible
 		switch(baseCommand){
 			case "MOVE":
 				for(int i = 0; i < neighbors.size(); i++){
@@ -141,60 +174,43 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 				}
 				break;
 			case "WORK":
+				displayAll(Jobs, false);
+				displayAll(Work, false);
 				break;
 			case "UPGRADE":
+				break;
+			case "ACT":
+			case "REHEARSE":
+				displayAll(Work, false);
 				break;
 			default:
 
 		}
 	}
 
-	public void setHomeScreen(){
+	public void setHomeScreen(){//remove current buttons, display home buttons
+		System.out.println(baseCommand);
 		closeDisplay();
 		display(escape, false);	
 		displayAll(Home, true);
 		command = new String();
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {//set command
 		selected  = true;
 		command = e.getActionCommand();
 		try{
 			Integer.parseInt(command);
 		}catch(Exception c){
-			if(!command.equals("NO") || !command.equals("END")){
-				baseCommand = command;
+			if(!command.equals("NO") && !command.equals("END")){
+				setBaseCommand(command);
+			}
+			if(command.equals("END")){//refresh for next player
+				command = new String();
+				Jobs.clear();
+				JOBS.clearButtons();
 			}
 		}
-		//System.out.println("action committed: " + e.getActionCommand());
-        /*if ("MOVE".equals(e.getActionCommand())) {
-			command = "MOVE";
-			//movePanel();
-			//display(Move, true);
-        } else if("WORK".equals(e.getActionCommand())) {
-			command = "WORK";			
-			displayAll(Home, false);
-			display(escape, true);
-			//get the roles or work
-		} else if("UPGRADE".equals(e.getActionCommand())){
-			command = "UPGRADE";	
-			displayAll(Home, false);
-			display(escape, true);
-			//display casting office 
-		} else if("END".equals(e.getActionCommand())){
-			//displayAll(Home, true);
-		} else if("ACT".equals(e.getActionCommand())){
-			//displayAll(Home, true);
-		} else if("REHEARSE".equals(e.getActionCommand())){
-			//displayAll(Home, true);
-		} else if("NO".equals(e.getActionCommand())){
-			closeDisplay();
-			command = "NO";
-			display(escape, false);	
-			displayAll(Home, true);
-			command = new String();
-		} else {
-			command = get*/
     }
 
 

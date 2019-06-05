@@ -13,8 +13,7 @@ public class SwingPaint{
 		size = new Dimension(1150,850);
 	}
 
-	public MyPanelTwo getPanel(){return newContentPane.retrievePanel(); } 
-	public MyPanel getArt(){return newContentPane.retrieveArt(); }
+	public Window getDisplay(){return newContentPane;}
 
     public void createAndShowGUI() {
         System.out.println("Created GUI on EDT? "+

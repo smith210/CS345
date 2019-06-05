@@ -14,6 +14,7 @@ public class Scene{
 	public void setID(int sceneID){ sceneNum = sceneID; }
 	public void setBudget(int movieBudget){ this.movieBudget = movieBudget; }
 	public void createMains(LinkedList<MainRole> actors){ this.actors = actors; } 
+	public boolean getDisplayScene(){return isDisplayed;}
 	public String getName(){ return sceneName; }
 	public int getSceneNum(){ return sceneNum; }
 	public int getBudget(){ return movieBudget; }

@@ -8,6 +8,7 @@ public class Board{
 	private int round;
 	private int display;
 	private userInput query;
+	private boolean playerMoved;
 	
 	public Board(){
 		GUI = new SwingPaint();
@@ -17,7 +18,8 @@ public class Board{
 		display = 1;	
 		round = 3;
 		query = new userInput();
-		cont = new Controller(query, GUI.getPanel(), GUI.getArt());
+		cont = new Controller(query, GUI.getDisplay());
+		playerMoved = false;
 	}
 	
 	public Board(int playerNum){
@@ -29,7 +31,7 @@ public class Board{
 		display = 1;	
 		round = 3;
 		query = new userInput();
-		cont = new Controller(query, GUI.getPanel(), GUI.getArt());
+		cont = new Controller(query, GUI.getDisplay());
 
 	}
 	
@@ -42,9 +44,11 @@ public class Board{
 	}
 
 	private void createPlayers(int playerNum){
+		ColorTemplates picture = new ColorTemplates();
 		for(int i = 0; i < playerNum; i++){
 			Player temp = new Player();
-			temp.setQuery(query);
+			temp.setColors(picture.get(i));
+			//temp.setQuery(query);
 			temp.setPlayerName("Player " + (i+1));
 			temp.setLocation(tiles.get(4));
 			users.add(temp);
@@ -59,7 +63,49 @@ public class Board{
 		}
 	}
 
-	private boolean move(Player p, boolean hasMoved){
+
+	private void role(Player p){
+		cont.fixView("ROLE");			
+		//cont.createJobButtons();
+		while(query.getIntInput() == 0){
+			cont.getCommand();	
+		}
+		if(query.getIntInput() != -1){
+			int ID = query.getIntInput() - 1;
+			Work newHire = p.getLocation().getSet().getAllActors().get(ID);
+			p.setJob(newHire);
+			newHire.bufWork();
+			p.buffActingStatus(true);
+			cont.finishedAction("Work");
+		}
+		//cont.wrapup();
+
+	}
+
+	private void work(Player p){
+		//cont.fixView("WORK");	
+		if(!p.isWorking()){
+			role(p);
+		}
+		if(p.isWorking() && !playerMoved){
+			//set buttons for act and rehearsal
+			cont.fixView("WORK");
+			while(query.getIntInput() == 0){
+				cont.getCommand();	
+			}
+			if(query.getIntInput() != -1){
+				cont.finishedAction("Work");				
+			}			
+		}
+	
+		if(playerMoved){
+			System.out.println("finished moving");
+			cont.finishedAction("Work");
+		}
+		cont.wrapup();
+	}
+
+	private void move(Player p){
 		LinkedList<String> hotSpots = p.neighborNames();
 		query.addNeighborNames(hotSpots);
 		cont.fixView("MOVE");
@@ -69,38 +115,39 @@ public class Board{
 
 		if(query.getIntInput() != -1){
 			p.setLocation(tiles.get(query.getIntInput()));
-			hasMoved = true;
-			cont.disableMove();	
+			playerMoved = true;
+			cont.finishedAction("Move");	
 			//cont.redisplayLoc(p.getLocation());
 		}
 		cont.wrapup();
-		return hasMoved;
+		//return hasMoved;
 	}
 
 	public void getPlayerInput(Player p, int ID){
 
-		boolean finishTurn = false;
-		boolean hasWorked = false;
-		boolean hasMoved = false;
-		while(!finishTurn){
-			cont.redisplayImage(p);
-			String userInput = query.getCommand("Enter your move: ");
+		/*boolean hasWorked = false;
+		boolean hasMoved = false;*/
+		while(!query.getUserInput().equals("END")){
+			cont.setPlayer(p);
+			String userInput = query.getUserInput();
 			//String userInput = query.getUserInput();
-
+			query.resetValue();
+			if(query.getUserInput().equals("END")){
+				System.out.println("END");				
+				System.exit(0);
+			}
 			switch(userInput){
 				case "MOVE":
-					if(!hasMoved){
-						move(p, hasMoved);
-					}
+					//if(!hasMoved){
+					move(p);
+					//}
 					break;
 				case "UPGRADE":
 					p.upgrade();
 					break;
 				case "WORK":
-					hasWorked = p.initializeWork(hasWorked, hasMoved);
-					break;
-				case "END":
-					finishTurn = true;
+					//hasWorked = p.initializeWork(hasWorked, hasMoved);
+					work(p);
 					break;
 				case "AMOUNT":
 					p.evalWalletContent().displayContent();
@@ -120,8 +167,14 @@ public class Board{
 					//System.out.print("INVALID MOVE. ");	
 			}
 			cont.getCommand();
+			cont.redisplayImage();
 
-		}
+		}			
+		//cont.fixView("END");
+		playerMoved = false;
+		query.resetValue();
+		cont.fixView("END");
+		
 		System.out.println(" ");
 	}
 
@@ -134,6 +187,7 @@ public class Board{
 		int num = start;
 		while(!hasFinishedRound()){
 			Player p = users.get(num);
+			cont.redisplayImage();
 			getPlayerInput(p, num);
 			Set pSet = p.getLocation().getSet();
 			LinkedList<Player> onScene = getPlayers(p.getLocation());

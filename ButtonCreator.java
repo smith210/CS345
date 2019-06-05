@@ -23,6 +23,14 @@ public class ButtonCreator{// implements ActionListener{
 		button.setPreferredSize(new Dimension(w, h));
 	}
 
+	public void createTwoLineButton(String one, String two){
+		button.setLayout(new BorderLayout());
+		JLabel topLabel = new JLabel(one);
+		JLabel bottomLabel = new JLabel(two);
+		button.add(BorderLayout.NORTH, topLabel);
+		button.add(BorderLayout.SOUTH, bottomLabel);
+	}
+
 	public JButton getJButton(){ return button; }
 
 	public String getName(){ return buttonName; }

@@ -1,4 +1,8 @@
 import java.util.*;
+import java.awt.*;
+import java.lang.*;
+import javax.swing.*;
+import javax.accessibility.*;
 
 public class Player{
 
@@ -10,7 +14,8 @@ public class Player{
 	private Work jobDescription;
 	private Roll dice; 
 	private CastingOffice co;
-	private userInput query;
+	private Colors surroundings;
+	private Image playerIcon;
 
 	public Player(){
 		playerName = "";
@@ -20,17 +25,25 @@ public class Player{
 		jobDescription = new Work();
 		dice = new Roll();
 		co = new CastingOffice();
-		query = new userInput();
+		//query = new userInput();
+		surroundings = new Colors();
 	}
 
-	public void setQuery(userInput query){ this.query = query;
-											System.out.println("SAME QUERY"); }
+	//public void setQuery(userInput query){ this.query = query;}
+
+	public void setColors(Colors surroundings){ this.surroundings = surroundings; }
 
 	public void setLocation(Location location){ currLocation = location; }
 
 	public void setPlayerName(String name){ playerName = name; }
 
 	public void setActorLevel(int actorLevel){this.actorLevel = actorLevel;}
+
+	public void setJob(Work jobDescription){ this.jobDescription = jobDescription; }
+	
+	public void buffActingStatus(boolean activeActor){ this.activeActor = activeActor; }
+
+	public Colors getSurroundings(){ return surroundings; }
 
 	public String getPlayerName(){ return playerName; }
 	
@@ -133,7 +146,7 @@ public class Player{
 				co.updateWallet(myWallet);
 				co.displayPrice();
 				myWallet.displayContent();
-				int levelDesired = query.getIntInput();
+				int levelDesired = -1;
 				if(levelDesired != -1){						
 					boolean hasPayment = co.pay(levelDesired);
 
@@ -182,7 +195,7 @@ public class Player{
 				availableWork.get(jobNum).display();
 			}
 			boolean validInput = false;
-			int roleID = query.getIntInput();
+			int roleID = -1;
 			if(roleID != -1){
 				jobDescription = availableWork.get(roleID);
 				jobDescription.bufWork();
@@ -203,7 +216,7 @@ public class Player{
 			boolean validInput = false;
 			dice.displayRehearsals();
 			while(!validInput){
-				String userInput = query.getCommand("What do you want to work on: ");
+				String userInput = "ACT";
 
 				switch(userInput){
 					case "REHEARSE":

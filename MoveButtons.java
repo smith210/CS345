@@ -9,7 +9,7 @@ public class MoveButtons{
 	public MoveButtons(){
 		locationButtons = new LinkedList<ButtonCreator>();
 
-		ButtonCreator TRAIN = new ButtonCreator("Train");
+		ButtonCreator TRAIN = new ButtonCreator("Train Station");
 		locationButtons.add(TRAIN);
 
 		ButtonCreator JAIL = new ButtonCreator("Jail");

@@ -39,6 +39,14 @@ public class Set{
 		return actingJobs;
 	}
 
+	public LinkedList<Work> getAllActors(){
+		LinkedList<Work> allActors = new LinkedList<Work>();
+		allActors.addAll(film.getMainActors());		
+		allActors.addAll(actors);
+		return allActors;
+	}
+
+
 	public LinkedList<Work> findAvailWork(int playerLevel){
 
 		LinkedList<Work> availActors = new LinkedList<Work>();

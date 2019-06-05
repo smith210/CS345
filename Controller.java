@@ -3,45 +3,68 @@ import java.util.*;
 public class Controller{
 	private String command;
 	private LinkedList<String> neighborLocations;
-	private boolean packageModel;
-	private boolean packageView;
+	private Player player;
 	private userInput model;
-	private MyPanelTwo view;
-	private MyPanel design;
+	private LinkedList<Work> jobsinArea;
+	//private MyPanelTwo view;
+	//private MyPanel design;
+	private Window view;
 
 
-	public Controller(userInput model, MyPanelTwo view, MyPanel design){
+	public Controller(userInput model, Window view){
 		neighborLocations = new LinkedList<String>();
 		command = new String();
-		packageModel = false;
-		packageView = false;
+		jobsinArea = new LinkedList<Work>();		
+
 		this.model = model;
 		this.view = view;
-		this.design = design;
-		//waitForEvent();
+		
 	}
 
-	public void setModel(userInput model){ this.model = model; }
-	public void setView(MyPanelTwo vies){   this.view = view;  }
-	public boolean hasModel(){return packageModel;}
-	public boolean hasView(){return packageView;}
-	public void bufModel(){packageModel = true;}
-	public void bufView(){packageView = true;}
-	public void rest(){
-		packageModel = false;
-		packageView = false;
+	public void setPlayer(Player player){ 
+		this.player = player;
+		command = new String();
+		view.passPlayerDetails(player);
+		disableMove(player.isWorking());
+		disableWork(player.getLocation().getSet());
+		disableUpgrade(player.getLocation());
 	}
 
+	public void setJobsInArea(LinkedList<Work> jobs){ jobsinArea = jobs; }
 	public void addNeighborName(String name){ neighborLocations.add(name); }
 	public LinkedList<String> getNeighbors(){ return neighborLocations; }
 	public void clearNeighbors(){ neighborLocations = new LinkedList<String>(); }
 
-	public void redisplayImage(Player p){ 
-			design.passPlayerDetails(p);
-			design.repaint(); 
+
+	public void redisplayImage(){ 
+		view.passPlayerDetails(player);
+	}
+	public void disableUpgrade(Location loc){
+		if(loc.getID() != 8){
+			showHomeButton("Upgrade", false);
+		}else{
+			showHomeButton("Upgrade", true);
+		}
+	}
+	public void disableMove(boolean isWorking){
+		if(isWorking){
+			showHomeButton("Move", false);
+		}
+	}
+	public void finishedAction(String name){
+		System.out.println("name false: "  + name);		
+		showHomeButton(name, false);
 	}
 
-	public void fixView(String command){
+	private void disableWork(Set set){
+		if(set.getShotCounter() == 0){
+			showHomeButton("Work", false);
+		}else{
+			showHomeButton("Work", true);
+		}
+	}
+
+	public void fixView(String command){//
 		switch(command){
 			case "MOVE":
 				LinkedList<String> neighbors = model.getNeighbors();
@@ -49,28 +72,41 @@ public class Controller{
 				view.movePanel();
 				break;
 			case "WORK":
+				view.workPanel();
+				break;
+			case "ROLE":
+				if(jobsinArea.size() == 0 && !player.isWorking()){
+					setJobsInArea(player.getLocation().getSet().getAllActors());
+					view.createJobButtons(jobsinArea, player.getLevel());
+				}
+				view.rolePanel();
 				break;
 			case "UPGRADE":
 				break;
 			case "NO":
-				break;			
+				view.setDefaultScreen();
+				break;
+			case "END"://refresh move for the next player
+				showHomeButton("Move", true);
+				jobsinArea.clear();
 			default:
 
 		}
 	}
 
-	public void wrapup(){ view.setHomeScreen(); }
+	public void wrapup(){ view.setDefaultScreen(); }
 
-	public void disableMove(){ view.disableHome("Move"); }
+	private void showHomeButton(String name, boolean visible){ view.setHomeButton(name, visible); }
+	
 
-	/*public void setCommand(String command){ this.command = command;}
-	public String sendCommand(){ return command; }*/
 	public void getCommand(){
 		//System.out.println("WAITING");
-		if(view.hasSelected()){
-			view.retrieved();
-			command = view.getCommand();
-			model.setUserInput(command);
-		}
+
+		//view.retrieved();
+		command = view.getCommand();
+		model.setUserInput(command);
+		//view.resetCommand();
+
+
 	}
 }

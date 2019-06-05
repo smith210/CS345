@@ -14,28 +14,38 @@ public class Painting{
     private int Mwidth = 400;
     private int Mheight = 400;
 
-	private Color navyBlue = new Color(4,166,91);
-	private	Color purplish = new Color(0,94,57);
-	private Color tan = new Color(222,220,231);
-	private Color sunflower = new Color(200, 141, 37);
-
+	private LinkedList<Image> backgrounds;
+	//private LinkedList<Image> players;
 	private Image background;
-	private LinkedList<Image> players;
 	private Image credits = Toolkit.getDefaultToolkit().createImage("images/credits.png");;
 	private Image dollars = Toolkit.getDefaultToolkit().createImage("images/dollars.png");;
 
 	public Painting(){
-		background = Toolkit.getDefaultToolkit().createImage("images/cf.jpg");
-		String[] playerString = {"images/deneke.jpg", "images/tanzima.jpg","images/jagodzinski.jpg"};
-		players = new LinkedList<Image>();
-		createPlayers(playerString);
+		String[] backgroundStrings = {"train.JPG", "jail.JPG", "mainsqure.JPG", "trailer.JPG",
+										"hotel.JPG", "church.JPG", "secret.JPG", "casting.JPG",
+										"grocery.JPG", "saloon.JPG", "bank.JPG", "ranch.JPG"};
+		//String[] playerString = {"deneke.jpg", "tanzima.jpg","jagodzinski.jpg"};
+		backgrounds = new LinkedList<Image>();
+		//players = new LinkedList<Image>();
+		//createImages(playerString, players);
+		createImages(backgroundStrings, backgrounds);
+
+		background = backgrounds.get(3);
 		
 	}
 
-	private void createPlayers(String[] filePaths){
+	public void setBackground(int ID){
+		try{
+			background = backgrounds.get(ID - 1); 
+		}catch(Exception e){
+			background = backgrounds.get(3);
+		}
+	}
+
+	private void createImages(String[] filePaths, LinkedList<Image> photos){
 		for(int i = 0; i < filePaths.length; i++){
-			Image currPlayer = Toolkit.getDefaultToolkit().createImage(filePaths[i]);
-			players.add(currPlayer);
+			Image currPlayer = Toolkit.getDefaultToolkit().createImage("images/" + filePaths[i]);
+			photos.add(currPlayer);
 		}
 	}
 
@@ -95,11 +105,11 @@ public class Painting{
 	}
 
 
-	public void paintPlayer(int index, Graphics g, Player p){
+	public void paintPlayer(Graphics g, Player p){
 		int xCoord = 210;
 		int yCoord = 575;
 		g.setFont(new Font("TimesRoman", Font.BOLD, 14));
-		g.drawImage(players.get(index), 30, 555, null);
+		//g.drawImage(players.get(currPlayer), 30, 555, null);
 
 		g.setColor(Color.WHITE);
 		g.drawString("Name:", xCoord, yCoord);
@@ -117,24 +127,24 @@ public class Painting{
 		g.drawString(w.getDollars() + " Dollars", xCoord + 25, yCoord + 190);  
 	}
 	public void paintBackground(Graphics g){
-
-		g.drawImage(background, 0, 0, null);
-
+		g.drawImage(background, 0, 0, 800, 532, null);
 	}
 
-    public void paintSquare(Graphics g){
+    public void paintSquare(Colors c, Graphics g){
 		Graphics2D g2D = (Graphics2D) g;
 
 		g2D.setStroke(new BasicStroke(4));
-        g2D.setColor(navyBlue);
+        g2D.setColor(c.getPrimary());
         g2D.fillRect(xPos,yPos,width,height);
         g2D.setColor(Color.BLACK);
         g2D.drawRect(xPos,yPos,width,height);
 
-        g2D.setColor(purplish);
+        g2D.setColor(c.getSecondary());
         g2D.fillRect(MxPos,MyPos,Mwidth,Mheight);
         g2D.setColor(Color.BLACK);
         g2D.drawRect(MxPos,MyPos,Mwidth,Mheight);
+
+		g2D.drawImage(c.getIcon(), 30, 555, null);
     }
 }
 
