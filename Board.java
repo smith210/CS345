@@ -1,40 +1,44 @@
 import java.util.*;
 
 public class Board{
-	private Controller cont;
-	private SwingPaint GUI;
-	private LinkedList<Player> users;
 	private GameTiles tiles;
+	private SceneDeck deck;
 	private int round;
-	private int display;
-	private userInput query;
-	private boolean playerMoved;
 	
 	public Board(){
-		GUI = new SwingPaint();
-		GUI.createAndShowGUI();
-		users = new LinkedList<Player>();
-		tiles = new GameTiles();
-		display = 1;	
+		tiles = new GameTiles();//where the locations and extra actors generate
+		deck = new SceneDeck();//where the scenes and main actors generate
 		round = 3;
-		query = new userInput();
-		cont = new Controller(query, GUI.getDisplay());
-		playerMoved = false;
 	}
 	
 	public Board(int playerNum){
-		GUI = new SwingPaint();
-		GUI.createAndShowGUI();
-		users = new LinkedList<Player>();
 		tiles = new GameTiles();
-		createPlayers(playerNum);
-		display = 1;	
 		round = 3;
-		query = new userInput();
-		cont = new Controller(query, GUI.getDisplay());
-
 	}
-	
+
+	public void setRound(int round){ this.round = round; }
+
+	public int getRound(){
+		return round;
+	}
+
+	public void nextRound(){
+		round = round - 1;
+	}
+
+	public Location getTrailer(){ return tiles.get(4); }
+
+	public boolean hasFinishedRound(){ return tiles.isBoardWrapped(); }
+
+	public boolean hasFinishedGame(){ return round == 0; }
+
+	public void prepBoard(){
+		tiles.resetBoard();
+		tiles.drawScenes(deck);
+	}
+
+
+/*	
 	public userInput getQueries(){ return query; }
 
 	private void returnToTrailer(){
@@ -169,10 +173,11 @@ public class Board{
 		//return hasMoved;
 	}
 
-	public void getPlayerInput(Player p, int ID){
+*/
+	/*public void getPlayerInput(Player p, int ID){
 
-		/*boolean hasWorked = false;
-		boolean hasMoved = false;*/
+		boolean hasWorked = false;
+		boolean hasMoved = false;
 		while(!query.getUserInput().equals("END")){
 			cont.setPlayer(p);
 			String userInput = query.getUserInput();
@@ -222,8 +227,8 @@ public class Board{
 		cont.fixView("END");
 		
 		System.out.println(" ");
-	}
-
+	}*/
+/*
 	public int iterateRound(int start){
 		tiles.drawScenes();
 		System.out.println("BEGINNING OF ROUND " + display);
@@ -233,7 +238,7 @@ public class Board{
 		int num = start;
 		while(!hasFinishedRound()){
 			Player p = users.get(num);
-			p.allowTurn(true);
+			//p.allowTurn(true);
 			cont.redisplayImage();
 			getPlayerInput(p, num);
 			Set pSet = p.getLocation().getSet();
@@ -264,7 +269,7 @@ public class Board{
 			}
 	
 			num = num + 1;
-			p.allowTurn(false);
+			//p.allowTurn(false);
 			if(num == users.size()){ 
 				num = 0; 
 			}	
@@ -295,40 +300,6 @@ public class Board{
 
 	public int displayRound(){
 		return display;
-	}
-
-	public int getRound(){
-		return round;
-	}
-
-	public void nextRound(){
-		round = round - 1;
-		display = display + 1;
-	}
-
-	public Player evaluateWinner(){
-		boolean evalWinner = false;
-		Player winner = new Player();
-		Wallet winnerCash = new Wallet();		
-		for(int i = 0; i < users.size(); i++){
-			Player p = users.get(i);
-			Wallet w = p.evalWalletContent();
-
-			if(!evalWinner){
-				evalWinner = true;
-				winner = p;
-				winnerCash = w;
-			}else{
-				int winnerPoints = winnerCash.calculatePoints(winner.getLevel());
-				int playerPoints = w.calculatePoints(p.getLevel());
-				if(playerPoints > winnerPoints){
-					winner = p;
-					winnerCash = w;
-				}
-			}
-			
-		}
-		return winner;
-	}
+	}*/
 
 }

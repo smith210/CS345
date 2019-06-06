@@ -7,39 +7,29 @@ public class Window extends JPanel{
  	//protected JButton b1, b2, b3, b4;
 	private MyPanel panel;
 	private MyPanelTwo buttonPanel;
+	private Deadwood game;
    
-	public Window() {
+	public Window(Deadwood game) {
+		this.game = game;
 		panel = new MyPanel();
-		buttonPanel = new MyPanelTwo();
+		buttonPanel = new MyPanelTwo(game, panel);
 
 		add(panel);  
 		add(buttonPanel);
 
     }
 
-    public Dimension getPreferredSize() {
+    /*public Dimension getPreferredSize() {
         return new Dimension(200,900);
     }
 
-	public boolean containsNoJobs(){ return buttonPanel.rolesEmpty(); }
-
-	public String getCommand(){ return buttonPanel.getCommand(); }
-	public void resetCommand(){ buttonPanel.resetCommand(); }
-
-	public void movePanel(){ buttonPanel.movePanel();}
-	public void rolePanel(){ buttonPanel.rolePanel();}
-	public void workPanel(){ buttonPanel.workPanel();}
-	public void retrieveNeighbors(LinkedList<String> neighbors){ buttonPanel.retrieveNeighbors(neighbors); }
-	public void createJobButtons(LinkedList<Work> jobs, int level){ buttonPanel.setRoleButtons(jobs, level); }	
 
 	public void passPlayerDetails(Player p){
-		panel.passPlayerDetails(p);
+		panel.passPlayerDetails(game.currentPlayer());
 	}
-	public void setHomeButton(String name, boolean view){ buttonPanel.toggleHomeButton(name, view); }
-	public void setDefaultScreen(){ buttonPanel.setHomeScreen(); }
 
 	public MyPanelTwo retrievePanel(){ return buttonPanel; }
-	public MyPanel retrieveArt(){ return panel; }
+	public MyPanel retrieveArt(){ return panel; }*/
 
 
 }

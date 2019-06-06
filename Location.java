@@ -14,11 +14,17 @@ public class Location{
 		neighbors = new LinkedList<Location>();
 	}
 
+	public boolean hasMainActors(){ return workSpace.hasMains(); }
+
 	public void setID(int ID){ this.ID = ID; }
 
 	public void setName(String setName){ name = setName; }
 
 	public void setNeighbors(LinkedList<Location> neighbors){ this.neighbors = neighbors; }
+
+	public boolean doneFilming(){ return workSpace.getShotCounter() == 0; }
+
+	public LinkedList<Work> getJobs(){ return workSpace.getAllActors(); }
 
 	public String getLocationName(){ return name; }
 

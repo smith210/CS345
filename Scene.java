@@ -7,7 +7,13 @@ public class Scene{
 	private int movieBudget;
 	private boolean isDisplayed;
 
-	
+	public Scene(){
+		sceneName = new String();
+		sceneNum = 0;
+		actors = new LinkedList<MainRole>();
+		movieBudget = 0;
+		isDisplayed = false;
+	}
 
 	public void displayScene(){ isDisplayed = true; }
 	public void setName(String sceneName){ this.sceneName = sceneName; }

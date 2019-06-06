@@ -11,6 +11,8 @@ public class Set{
 		actors = new LinkedList<ExtraRole>();
 	}
 
+	public boolean hasMains(){ return film.hasMainActors(); }
+
 	public void createExtras(LinkedList<ExtraRole> actors){ this.actors = actors; }
 	public void setScene(Scene film){ this.film = film; }
 	public Scene getScene(){ return film; }

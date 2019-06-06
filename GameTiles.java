@@ -3,15 +3,15 @@ import java.io.*;
 
 public class GameTiles{
 	private LinkedList<Location> tiles;
-	private SceneDeck deck;
 	
 	GameTiles(){
 		tiles = new LinkedList<Location>();
-		deck = new SceneDeck();
-		initializeTiles();
+		initializeTiles();//generate the locations and extra actors
 	}
 
-	public Location get(int ID){
+	public void resetBoard(){ initializeTiles(); }
+
+	public Location get(int ID){//get the location at certain ID
 		int curr = 0;
 		while(curr != tiles.size() && tiles.get(curr).getID() != ID){
 			curr++;
@@ -21,22 +21,25 @@ public class GameTiles{
 	
 	public int size(){ return tiles.size(); }
 
-	public boolean isBoardWrapped(){
-		boolean finishedRound = true;
-		for(int i = 0; i < tiles.size(); i++){
-			int currCounters = tiles.get(i).getSet().getShotCounter();
-			if(currCounters != 0){ finishedRound = false; }
+	public boolean isBoardWrapped(){ //check if all locations have no shot counters
+		int curr = 0;		
+		while(curr != tiles.size() && tiles.get(curr).getSet().getShotCounter() != 0){
+			curr++;
 		}
-		return finishedRound;
+		if(curr == tiles.size()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
-	public void drawScenes(){
+	public void drawScenes(SceneDeck deck){ //set scene to a location
 		for(int i = 0; i < tiles.size(); i++){
 			tiles.get(i).getSet().setScene(deck.drawCard());
 		}
 	}
 
-	public boolean checkFinishRound(){
+	public boolean checkFinishRound(){ //check if round has finished
 		boolean finishRound = true;		
 		for(int i = 0; i < tiles.size(); i++){
 			Location currTile = tiles.get(i);
@@ -49,7 +52,7 @@ public class GameTiles{
 	
 	}
 
-	private int grabID(int ID, int boundary){
+	private int grabID(int ID, int boundary){ //initializeNeighbors helper
 		if(ID == boundary){
 			if(boundary == 8){
 				ID = 1;
@@ -62,7 +65,7 @@ public class GameTiles{
 		return ID;
 	}
 
-	private void initializeNeighbors(){		
+	private void initializeNeighbors(){	//creates the neighbor relation
 		int neighborLeft = 2;
 		int neighborRight = 8;
 		int neighborDown = 9;
@@ -99,7 +102,7 @@ public class GameTiles{
 		}
 	}
 	
-	private void initializeTiles(){
+	private void initializeTiles(){//parse through locations
 
 		File tileFile = new File("DeadwoodTiles.txt");
 		try{

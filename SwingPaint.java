@@ -1,21 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
-public class SwingPaint{
+public class SwingPaint extends JFrame{
    
 	private Color background;
-    private Window newContentPane;
+   	private Window newContentPane;
 	private Dimension size;
+	private Deadwood game;
 
-	SwingPaint(){
+
+	SwingPaint(Deadwood game){
 		background = new Color(222,220,231);
-		newContentPane = new Window();
+		newContentPane = new Window(game);
 		size = new Dimension(1150,850);
+		this.game = game;
+
 	}
 
-	public Window getDisplay(){return newContentPane;}
-
-    public void createAndShowGUI() {
+	public void createAndShowGUI() {
         System.out.println("Created GUI on EDT? "+
         SwingUtilities.isEventDispatchThread());
         JFrame f = new JFrame("Deadwood");
@@ -29,5 +32,7 @@ public class SwingPaint{
         //f.add(new MyPanel());
         f.pack();
         f.setVisible(true);
+//		game.run();
     }
+
 }

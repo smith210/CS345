@@ -3,21 +3,37 @@ import java.io.*;
 
 public class SceneDeck{
 	private LinkedList<Scene> cardDeck;
+	private LinkedList<Scene> drawnCards;
+	private LinkedList<Scene> discardCards;
 
 	SceneDeck(){
 		cardDeck = new LinkedList<Scene>();
-		initializeDeck();
+		drawnCards = new LinkedList<Scene>();
+		discardCards = new LinkedList<Scene>();
+		initializeDeck();//generate
 	}
 
-	public Scene drawCard(){
+	public void tossCards(){//put drawn cards into discard
+		discardCards.addAll(drawnCards);
+		drawnCards.clear();
+	}
+
+	public Scene drawCard(){//draw a card at random, and return
 		int cardID = (int) (Math.random() * cardDeck.size());
-		Scene chosenScene = cardDeck.get(cardID);
-		cardDeck.remove(cardID);
 		
+		if(cardDeck.size() == 0){//shuffle discarded cards back into deck
+			cardDeck = discardCards;
+		}
+
+		//draw from deck
+		Scene chosenScene = cardDeck.get(cardID);
+		drawnCards.add(chosenScene);
+		cardDeck.remove(cardID);
+			
 		return chosenScene;
 	}
 	
-	private void initializeDeck(){
+	private void initializeDeck(){//generate scenes and main actors
 		File tileFile = new File("setInfo.txt");
 		try{
 			Scanner scn = new Scanner(tileFile);

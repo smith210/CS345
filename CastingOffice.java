@@ -1,4 +1,8 @@
+import java.util.*;
+
 public class CastingOffice{
+
+
 	private final int[] levelTwo = {4, 5};
 	
 	private final int[] levelThree = {10, 10};
@@ -9,13 +13,9 @@ public class CastingOffice{
 	
 	private final int[] levelSix = {40, 25};
 
-	private Wallet purse;
-	private userInput query;
+	//private Wallet purse;
+	//private userInput query;
 
-	CastingOffice(){
-		purse = new Wallet();
-		query = new userInput();
-	}
 
 	private void display(int[] detail, String name){
 		System.out.println(name + " " + detail[0] + " Dollars OR " + detail[1] + " Credits"); 
@@ -33,9 +33,11 @@ public class CastingOffice{
 		System.out.println();
 	}
 
-	public void updateWallet(Wallet purse){ this.purse = purse; }
+	//public retrievePrice(
 
-	private int canPay(int pocketChange, int level, int type){
+	//public void updateWallet(Wallet purse){ this.purse = purse; }
+
+	/*private int canPay(int pocketChange, int level, int type){
 
 		int payment = -1;
 		
@@ -120,7 +122,7 @@ public class CastingOffice{
 		}
 		return hasCash;
 
-	}
+	}*/
 
 
 }

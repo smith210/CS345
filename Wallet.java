@@ -15,13 +15,13 @@ public class Wallet{
 		return credits;
 	}
 
-	public void addDollars(int paycheck, String user){
-		displayStatus(paycheck, "Dollar", user);
+	public void addDollars(int paycheck){
+		//displayStatus(paycheck, "Dollar", user);
 		dollars = dollars + paycheck;
 	}
 
-	public void addCredits(int paycheck, String user){
-		displayStatus(paycheck, "Credit", user);
+	public void addCredits(int paycheck){
+		//displayStatus(paycheck, "Credit", user);
 		credits = credits + paycheck;
 	}
 
