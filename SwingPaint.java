@@ -13,14 +13,20 @@ public class SwingPaint extends JFrame{
 	SwingPaint(Deadwood game){
 		background = new Color(222,220,231);
 		newContentPane = new Window(game);
-		size = new Dimension(1150,850);
+		size = new Dimension(1400,850);
 		this.game = game;
 
 	}
 
 	public void createAndShowGUI() {
-        System.out.println("Created GUI on EDT? "+
-        SwingUtilities.isEventDispatchThread());
+        String[] options = new String[]{"2","3"};
+		int response = JOptionPane.showOptionDialog(null, "How Many Players?", "Deadwood",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+        null, options, options[0]);
+		game.setPlayerNum(Integer.parseInt(options[response]));
+
+		
+
         JFrame f = new JFrame("Deadwood");
 		//f.add(new MyPanel());
 		//newContentPane.setOpaque(true);

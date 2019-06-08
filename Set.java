@@ -12,6 +12,7 @@ public class Set{
 	}
 
 	public boolean hasMains(){ return film.hasMainActors(); }
+	public int numMainRoles(){ return film.getMainActors().size(); }
 
 	public void createExtras(LinkedList<ExtraRole> actors){ this.actors = actors; }
 	public void setScene(Scene film){ this.film = film; }
@@ -28,18 +29,6 @@ public class Set{
 	public void getSceneDesc(){ film.displayContent(); }
 
 	public int getShotCounter(){ return shotCounter; }	
-
-	public LinkedList<Work> listAllWork(){
-		LinkedList<Work> actingJobs = new LinkedList<Work>();
-		LinkedList<MainRole> main = film.getMainActors();
-		for(int i = 0; i < main.size(); i ++){
-			actingJobs.add(main.get(i));
-		}
-		for(int j = 0; j < actors.size(); j++){
-			actingJobs.add(actors.get(j));
-		}
-		return actingJobs;
-	}
 
 	public LinkedList<Work> getAllActors(){
 		LinkedList<Work> allActors = new LinkedList<Work>();

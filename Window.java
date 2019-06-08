@@ -11,7 +11,7 @@ public class Window extends JPanel{
    
 	public Window(Deadwood game) {
 		this.game = game;
-		panel = new MyPanel();
+		panel = new MyPanel(game.allPlayers());
 		buttonPanel = new MyPanelTwo(game, panel);
 
 		add(panel);  

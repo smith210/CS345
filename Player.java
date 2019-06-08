@@ -7,6 +7,7 @@ import javax.accessibility.*;
 public class Player{
 
 	private String playerName;
+	private int playerID;
 	private int actorLevel, rehearsals;
 	private Location currLocation;
 	private Wallet myWallet;
@@ -16,6 +17,7 @@ public class Player{
 
 	public Player(){
 		playerName = "";
+		playerID = -1;
 		actorLevel = 1;
 		rehearsals = 0;
 		activeActor = false;
@@ -24,6 +26,9 @@ public class Player{
 		jobDescription = new Work();
 		surroundings = new Colors();
 	}
+
+	public void setID(int playerID){ this.playerID = playerID;}
+	public int getID(){ return playerID;}
 
 	public void setColors(Colors surroundings){ this.surroundings = surroundings; }
 
@@ -54,6 +59,8 @@ public class Player{
 
 	public Wallet evalWalletContent(){ return myWallet; }
 
+	public int getRehearsals(){ return rehearsals; }
+
 
 	public void pay(int cash, String type){
 		cash = cash * -1;		
@@ -66,23 +73,38 @@ public class Player{
 		}
 	}
 
-	public void bonusPayout(){
+	public void bonusPayout(LinkedList<Integer> rolls){
 		switch(jobDescription.getWorkType()){
 			case "MAIN":
-				
+				int numMain = currLocation.getSet().numMainRoles();
+				int mainIdx = currLocation.getSet().getScene().getActingHierarchy((MainRole)jobDescription);
+				int currHandout = 0;				
+				for(int i = 0; i > rolls.size(); i++){
+					if(mainIdx == currHandout){
+						myWallet.addDollars(rolls.get(i));
+					}
+					currHandout++;
+					if(currHandout == numMain){
+						currHandout = 0;
+					}
+				}
 			case "EXTRA":
 				myWallet.addDollars(jobDescription.getWorkLevel());
 			default://might of been on, but not acting
 		}
 	}
 
-	public void rehearse(){
+	public int rehearse(){
 		if(rehearsals + 1  <= currLocation.getSet().getScene().getBudget()){
 			rehearsals++;
+			return rehearsals;
 		}else{
-			System.out.println("You rehearsed enough! Just act already!");
+			return -1;
 		}
 	}
+
+	public boolean validActing(int roll){ return currLocation.getSet().isActSuccess(roll + rehearsals);}
+	public int totalRoll(int roll){ return roll + rehearsals; }
 
 	public void act(int roll){
 		String actorType = jobDescription.getWorkType();

@@ -7,7 +7,7 @@ public class Main{
 		Deadwood game = new Deadwood();		
 		SwingPaint GUI = new SwingPaint(game);	
 		GUI.createAndShowGUI();
-		game.run();	
+		//game.run();	
 
 	}
 }

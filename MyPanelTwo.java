@@ -12,9 +12,9 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 	private MyPanel view;
 	private Deadwood model;
 
+	boolean toggleMove, toggleRole, toggleWork, toggleUpgrade;
+
 	//private Player p;	
-	private boolean selected;
-	private String baseCommand;
 	private String command;
 	private LinkedList<String> neighbors;
 
@@ -28,9 +28,10 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 	public MyPanelTwo(Deadwood model, MyPanel view) {
 		this.model = model;
 		this.view = view;
-		baseCommand = new String();
 		command = new String();
-		selected = false;
+
+		model.getScenes();
+
 
 		neighbors = new LinkedList<String>();
 
@@ -40,22 +41,22 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		addButtons(Home);
 
 		WORK = new WorkButtons();
-		Work = WORK.getButtons();
-		addButtons(Work);
+		Work = new LinkedList<JButton>();
 
 		JOBS = new RoleButtons();
 		Jobs = new LinkedList<JButton>();
 
 		CAST = new CastButtons();
-		//Cast = CAST.getButtons();
-		//addButtons(Cast);
+		Cast = new LinkedList<JButton>();
 
 		MOVE = new MoveButtons();
 		Move = MOVE.getButtons();
 		addButtons(Move);
 
 		createEscape();
-		initializeButtons();
+		view.passPlayerDetails(model.currentPlayer());
+
+		//initializeButtons();
 		
 	}
 	private void addButtons(LinkedList<JButton> buttons){//add listener
@@ -71,8 +72,9 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		escapeCreate.changeSize(100,50);
 		escape = escapeCreate.getJButton();		
 		escape.addActionListener(this);
-		add(escape);
 
+		escape.setBorder(null);
+		add(escape);
 	}
 
     public Dimension getPreferredSize() {
@@ -80,8 +82,34 @@ public class MyPanelTwo extends JPanel implements ActionListener{
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);      
-		//redSquare.paintSquare(g);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 150));
+		g.setColor(Color.BLACK);
+		if(command.equals("ACT")){
+			g.drawString(Integer.toString(model.currentPlayer().totalRoll(model.getLastRoll())), 100, 700);
+			if(model.currentPlayer().validActing(model.getLastRoll())){
+				g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+				g.drawString("You're not doing so well...", 75,900);
+			}
+		}
     }  
+
+	private void displayAll(LinkedList<JButton> buttons, boolean v){//display all buttons
+		for(int i = 0; i < buttons.size(); i++){
+			buttons.get(i).setVisible(v);
+			//System.out.println(buttons.get(i).getText());
+		}
+	}
+
+	public void toggleHomeButton(String name, boolean view){//toggle desired home button
+		int curr = 0;		
+		while(curr != Home.size() && !name.equals(Home.get(curr).getText())){
+			curr++;
+		}
+		if(curr != Home.size()){
+			Home.get(curr).setEnabled(view);
+		}
+	}
+
 
 	private void searchMove(String name, boolean view){//search for location, set visibility
 		int curr = 0;		
@@ -96,207 +124,131 @@ public class MyPanelTwo extends JPanel implements ActionListener{
 		}
 	}
 
-	public void toggleHomeButton(String name, boolean view){//toggle desired home button
-		int curr = 0;		
-		while(curr != Home.size() && !name.equals(Home.get(curr).getText())){
-			curr++;
-		}
-		if(curr != Home.size()){
-			Home.get(curr).setEnabled(view);
-		}
+	public void revealHome(){
+		displayAll(Home, true);
+		escape.setVisible(false);
 	}
 
-	private void displayAll(LinkedList<JButton> buttons, boolean v){//display all buttons
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).setVisible(v);
-			//System.out.println(buttons.get(i).getText());
-		}
+
+	public void hideHome(){
+		displayAll(Home, false);
+		escape.setVisible(true);
 	}
 
-	public void initializeButtons(){
-		model.checkOnPlayer();
-		toggleHomeButton("Move", model.moveToggle());
-		toggleHomeButton("Work", model.workToggle());
-		toggleHomeButton("Upgrade", model.upgradeToggle());
-		view.passPlayerDetails(model.currentPlayer());
-
-	}
-
-	public void beginAction(){
-		switch(command){
+	public void clean(){
+		switch(model.getBaseCommand()){
 			case "MOVE":
-				for(int i = 0; i < model.currentNeighbors().size(); i++){
-					searchMove(model.currentNeighbors().get(i).getLocationName(), true);
-				}
-			case "UPGRADE":
-
+				displayAll(Move, false);
+				revealHome();
+				break;
 			case "WORK":
-	
-			default:
+				if(!model.finishedFilming()){
+					if(!model.currentlyWorking()){				
+						displayAll(Jobs, false);
+						if(model.moveToggle() && !command.equals("NO")){
+							displayAll(Work, true);
+							escape.setVisible(false);
+							toggleHomeButton("Move", false);
+						}else{
+							revealHome();
+						}
+					}
+				}
+				displayAll(Work, false);
+				Work.clear();
+				revealHome();
 
+				break;
+			case "UPGRADE":
+				displayAll(Cast, false);
+				CAST.removeButtons();
+				revealHome();
+				break;
+			default:
 		}
+
+	}
+
+	public void setButtons(){
+		toggleHomeButton("Move", model.moveToggle());
+		toggleHomeButton("Work", model.workToggle());	
+		toggleHomeButton("Upgrade", model.upgradeToggle());
 	}
 
 	public void toggleSwitch(){
-		displayAll(Home, model.menuToggled());
-		if(!model.menuToggled()){
-			beginAction();
-			escape.setVisible(true);
-		}else{
-			escape.setVisible(false);
-		}
-	}
-
-	/*public String getCommand(){ return command; }
-	public boolean hasSelected(){ return selected; }
-	public void resetCommand(){ command = new String(); }
-	public void retrieved(){ selected = false; }
-	public void setRoleButtons(LinkedList<Work> jobs, int level){//create the role buttons
-		JOBS.setLevel(level);		
-		JOBS.addButtons(jobs);
-		Jobs = JOBS.getButtons();
-		addButtons(Jobs);
-	}
-	public boolean rolesEmpty(){
-		if(Jobs.size() == 0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	public void retrieveNeighbors(LinkedList<String> neighbors){ this.neighbors = neighbors;}
-
-	private void setBaseCommand(String baseCommand){this.baseCommand = baseCommand; }
-
-	private void displayAll(LinkedList<JButton> buttons, boolean v){//display all buttons
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).setVisible(v);
-			//System.out.println(buttons.get(i).getText());
-		}
-	}
-
-	private void toggleFinishWork(boolean view){
-		JButton finish = Work.get(2);
-		finish.setVisible(view);
-	}
-
-	public void toggleHomeButton(String name, boolean view){//toggle desired home button
-		int curr = 0;		
-		while(curr != Home.size() && !name.equals(Home.get(curr).getText())){
-			curr++;
-		}
-		if(curr != Home.size()){
-			Home.get(curr).setEnabled(view);
-		}
-	}
-
-	private void display(JButton j, boolean v){
-		j.setVisible(v);
-	}
-
-	private void searchMove(String name, boolean view){//search for location, set visibility
-		int curr = 0;		
-		while(curr != Move.size() && !name.equals(Move.get(curr).getText())){
-			curr++;
-		}
-		if(curr == Move.size()){
-			return;
-		}else{
-			System.out.println(name + " found");
-			display(Move.get(curr), view);
-		}
-	}
-
-	private void addButtons(LinkedList<JButton> buttons){//add listener
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).addActionListener(this);
-			add(buttons.get(i));
-		}
-	}
-
-	private void createEscape(){//go back button
-		ButtonCreator escapeCreate = new ButtonCreator("Go Back");
-		escapeCreate.setCommand("NO");
-		escapeCreate.setVisibility(false);
-		escapeCreate.changeSize(100,50);
-		escape = escapeCreate.getJButton();		
-		escape.addActionListener(this);
-		add(escape);
-
-	}
-
-    public Dimension getPreferredSize() {
-        return new Dimension(300,800);
-    }
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);      
-		//redSquare.paintSquare(g);
-    }  
-
-	public void differentPanel(){//make home buttons invisible
-		displayAll(Home, false);
-		display(escape, true);
-	}
-
-	public void movePanel(){//set neighbor buttons visible
-		differentPanel();
-		for(int i = 0; i < neighbors.size(); i++){
-			searchMove(neighbors.get(i), true);
-		}
-	}
-
-	public void workPanel(){//set work buttons visible
-		differentPanel();
-		displayAll(Work, true);
-		toggleFinishWork(false);
-	}
-
-	public void rolePanel(){//set role buttons visible
-		differentPanel();
-		displayAll(Jobs, true);
-	}
-
-	private void closeDisplay(){//make displayed buttons invisible
-		switch(baseCommand){
-			case "MOVE":
-				for(int i = 0; i < neighbors.size(); i++){
-
-					searchMove(neighbors.get(i), false);
-				}
+		hideHome();	
+		switch(command){
+			case "MOVE":	
+				MOVE.addButtons(model.currentNeighbors());
+				Move = MOVE.getButtons();
+				addButtons(Move);
+				MOVE.clearButtons();
+				displayAll(Move, true);
 				break;
 			case "WORK":
-				displayAll(Jobs, false);
-				displayAll(Work, false);
+
+				if(!model.currentlyWorking()){
+					JOBS.setLevel(model.currentLevel());		
+					JOBS.addButtons(model.currentJobs());
+					Jobs = JOBS.getButtons();
+					addButtons(Jobs);
+					JOBS.clearButtons();
+					displayAll(Jobs, true);
+				}else{
+					int currRehearsals = model.currentPlayer().getRehearsals();
+					int budget = model.currentLocation().getSet().getScene().getBudget();
+					WORK.hitMaxRehearsals(currRehearsals, budget);
+					Work = WORK.getButtons();
+					addButtons(Work);
+					displayAll(Work, true);
+				}
 				break;
 			case "UPGRADE":
+				CAST.setLevel(model.currentLevel());
+				CAST.setCurrency(model.getCurrencyType());
+				CAST.generateCastButtons();
+				Cast = CAST.getButtons();
+				addButtons(Cast);
+				displayAll(Cast, true);
 				break;
-			case "ACT":
-			case "REHEARSE":
-				displayAll(Work, false);
+			case "DOLLAR":
+			case "CREDIT":
+				model.setPaymentMethod(command);
+				CAST.setCash(model.getCash());
+				CAST.setCurrency(command);
+				CAST.validateCanPay();
+				Cast = CAST.getButtons();
+				//addButtons(Cast);
+				displayAll(Cast, true);
 				break;
 			default:
+				clean();
+				
+				//revealHome();
+				
 
 		}
+
 	}
-	
-	public void setHomeScreen(){//remove current buttons, display home buttons
-		System.out.println(baseCommand);
-		closeDisplay();
-		display(escape, false);	
-		displayAll(Home, true);
-		command = new String();
-	}*/
 
 	public void actionPerformed(ActionEvent e) {//set command
 		//selected  = true;
-		initializeButtons();
 		System.out.println(e.getActionCommand());
-		command = e.getActionCommand();
+		repaint();
+		command = e.getActionCommand();	
+		if(!command.equals("END")){
+			toggleSwitch();
+		}
+		view.passCommand(command);
+//		toggleSwitch();
 		model.setUserInput(command);
-		toggleSwitch();
-		view.repaint();
+		model.switchCommand();
+		//toggleSwitch();
+		view.passPlayerDetails(model.currentPlayer());
+		setButtons();
+		repaint();
     }
+
 
 
 

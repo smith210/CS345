@@ -9,7 +9,12 @@ public class GameTiles{
 		initializeTiles();//generate the locations and extra actors
 	}
 
-	public void resetBoard(){ initializeTiles(); }
+	public void resetBoard(){ 
+		for(int i = 0; i < tiles.size(); i++){
+			Location curr = tiles.get(i);
+			curr.getSet().setScene(new Scene());
+		}		
+	 }
 
 	public Location get(int ID){//get the location at certain ID
 		int curr = 0;
@@ -35,7 +40,10 @@ public class GameTiles{
 
 	public void drawScenes(SceneDeck deck){ //set scene to a location
 		for(int i = 0; i < tiles.size(); i++){
-			tiles.get(i).getSet().setScene(deck.drawCard());
+			int ID = tiles.get(i).getID();
+			if(ID != 4 && ID != 8){				
+				tiles.get(i).getSet().setScene(deck.drawCard());
+			}
 		}
 	}
 

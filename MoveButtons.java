@@ -8,44 +8,10 @@ public class MoveButtons{
 	private LinkedList<ButtonCreator> locationButtons;
 	public MoveButtons(){
 		locationButtons = new LinkedList<ButtonCreator>();
+	}
 
-		ButtonCreator TRAIN = new ButtonCreator("Train Station");
-		locationButtons.add(TRAIN);
-
-		ButtonCreator JAIL = new ButtonCreator("Jail");
-		locationButtons.add(JAIL);
-
-		ButtonCreator MAINSTREET = new ButtonCreator("Main Street");
-		locationButtons.add(MAINSTREET);
-
-		ButtonCreator TRAILER = new ButtonCreator("Trailer");
-		locationButtons.add(TRAILER);
-
-		ButtonCreator HOTEL = new ButtonCreator("Hotel");
-		locationButtons.add(HOTEL);
-
-		ButtonCreator CHURCH = new ButtonCreator("Church");
-		locationButtons.add(CHURCH);
-
-		ButtonCreator SECRETHIDE = new ButtonCreator("Secret Hideout");
-		locationButtons.add(SECRETHIDE);
-
-		ButtonCreator CASTING = new ButtonCreator("Casting Office");
-		locationButtons.add(CASTING);
-
-		ButtonCreator GENSTORE = new ButtonCreator("General Store");
-		locationButtons.add(GENSTORE);
-
-		ButtonCreator SALOON = new ButtonCreator("Saloon");
-		locationButtons.add(SALOON);
-
-		ButtonCreator BANK = new ButtonCreator("Bank");
-		locationButtons.add(BANK);
-
-		ButtonCreator RANCH = new ButtonCreator("Ranch");
-		locationButtons.add(RANCH);
-		
-		setup();
+	public void clearButtons(){ 
+			locationButtons.clear(); 
 	}
 
 	public LinkedList<JButton> getButtons(){
@@ -57,6 +23,33 @@ public class MoveButtons{
 
 		return JMove;
 
+	}
+
+	public void addButtons(LinkedList<Location> neighbors){
+		for(int i = 0; i < neighbors.size(); i++){
+			createRoleButton(neighbors.get(i));
+		}
+	}
+
+
+	private void createRoleButton(Location opt){
+		ButtonCreator neighbor = new ButtonCreator(opt.getLocationName());
+		if(opt.getSet().getShotCounter() != 0){
+			String plural = "";			
+			if(opt.getSet().getShotCounter() != 1){
+				plural = "s";
+			}
+			neighbor.createOneLineButton(opt.getSet().getShotCounter() + " Shot" + plural + " Remaining", "UP");//shotCounterDisplay(opt.getSet().getShotCounter()));
+		}
+		neighbor.setVisibility(false);
+		neighbor.setCommand(Integer.toString(opt.getID()));
+		neighbor.setStatus(true);
+
+		/*if(w.getWorkType().equals("MAIN")){
+			//add celebrity icon next to button
+		}*/
+		//actor.changeSize(200,100);
+		locationButtons.add(neighbor);
 	}
 
 	public int getID(String name){
@@ -71,14 +64,7 @@ public class MoveButtons{
 		}
 	}
 
-	private void setup(){
-		for(int i = 1; i < locationButtons.size() + 1; i++){
-			locationButtons.get(i-1).setVisibility(false);
-			locationButtons.get(i-1).setCommand(Integer.toString(i));
-			locationButtons.get(i-1).setStatus(true);
-		}
-		
-	}
+
 
 	public void hide(int ID){
 		locationButtons.get(ID).setVisibility(false);

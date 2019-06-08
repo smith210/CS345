@@ -10,7 +10,6 @@ public class WorkButtons implements ActionListener{
 	public WorkButtons(){
 		REHEARSE = new ButtonCreator("Rehearse");
 		ACT = new ButtonCreator("Act");
-		FINISH = new ButtonCreator("Exit the Set");
 		setup();
 	}
 
@@ -23,25 +22,28 @@ public class WorkButtons implements ActionListener{
 		JButton act = ACT.getJButton();
 		JWork.add(act);
 
-		JButton finish = FINISH.getJButton();
-		JWork.add(finish);
-
 		return JWork;
 
+	}
+
+	public void hitMaxRehearsals(int rehearsals, int budget){
+		if(rehearsals >= budget){
+			REHEARSE.setStatus(false);
+			REHEARSE.createOneLineButton("Stop rehearsing, and start acting!", "DOWN");
+		}else{
+			REHEARSE.setStatus(true);
+		}
 	}
 
 	private void setup(){
 		REHEARSE.setVisibility(false);
 		ACT.setVisibility(false);
-		FINISH.setVisibility(false);
 
 		REHEARSE.setStatus(true);
 		ACT.setStatus(true);
-		FINISH.setStatus(true);
 
 		REHEARSE.setCommand("REHEARSE");
 		ACT.setCommand("ACT");
-		FINISH.setCommand("NO");
 	}
 
 	public void disableRehearse(){ REHEARSE.setStatus(false); }
@@ -55,7 +57,6 @@ public class WorkButtons implements ActionListener{
 	private void hide(){
 		REHEARSE.setVisibility(false);
 		ACT.setVisibility(false);
-		FINISH.setVisibility(false);
 	}
 
     public void actionPerformed(ActionEvent e) {
@@ -64,7 +65,7 @@ public class WorkButtons implements ActionListener{
         } else if("ACT".equals(e.getActionCommand())) {
 			hide();
 		} else {
-			FINISH.setVisibility(false);
+
 		}
     }
 

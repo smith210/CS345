@@ -24,8 +24,8 @@ public class HomeButtons implements ActionListener{
 		END.setCommand("END");
 
 		MOVE.setStatus(true);
-		WORK.setStatus(true);
-		UPGRADE.setStatus(true);
+		WORK.setStatus(false);
+		UPGRADE.setStatus(false);
 		END.setStatus(true);
 	}
 

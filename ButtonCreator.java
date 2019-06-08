@@ -12,6 +12,7 @@ public class ButtonCreator{// implements ActionListener{
 
 		//i = new ImageIcon("images/ticket.png");
  		button = new JButton(name);
+		//button.setFont(new Font("Nashville", Font.PLAIN, 35)); 
 		changeSize(200, 125);
 		buttonName = name;
 		System.out.println("adding button " + name);
@@ -22,6 +23,22 @@ public class ButtonCreator{// implements ActionListener{
 	public void changeSize(int w, int h){
 		button.setPreferredSize(new Dimension(w, h));
 	}
+
+	
+	public void createOneLineButton(String one, String position){
+		button.setLayout(new BorderLayout());
+		JLabel label = new JLabel(one);
+		switch(position){
+			case "UP":
+				button.add(BorderLayout.NORTH, label);
+				break;
+			case "DOWN":
+				button.add(BorderLayout.SOUTH, label);
+				break;
+			default:
+		}
+	}
+
 
 	public void createTwoLineButton(String one, String two){
 		button.setLayout(new BorderLayout());

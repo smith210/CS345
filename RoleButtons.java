@@ -52,7 +52,7 @@ public class RoleButtons implements ActionListener{
 		ButtonCreator actor = new ButtonCreator(w.getJobTitle());
 		actor.createTwoLineButton(switchType(w.getWorkType()),Integer.toString(w.getWorkLevel()));
 		actor.setVisibility(false);
-		actor.setCommand(Integer.toString(ID + 1));
+		actor.setCommand(Integer.toString(ID));
 		actor.setStatus(false);
 		if(!w.getWorkStatus() && level >= w.getWorkLevel()){
 			actor.setStatus(true);
